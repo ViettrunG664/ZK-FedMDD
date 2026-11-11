@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-11-27T07:23:09.098Z",
+  "tests": [
+    {
+      "name": "replay_attack",
+      "description": "Submit same proof multiple times",
+      "success_count": 0,
+      "reject_count": 5,
+      "verdict": "PASS",
+      "note": "All replay attempts rejected"
+    },
+    {
+      "name": "tampered_proof",
+      "description": "Submit proof with modified pi_a",
+      "accepted": false,
+      "error": null,
+      "verdict": "PASS",
+      "note": "Tampered proof correctly rejected"
+    },
+    {
+      "name": "wrong_public_input",
+      "description": "Submit correct proof with wrong hashId",
+      "accepted": false,
+      "error": null,
+      "verdict": "PASS",
+      "note": "Mismatch correctly detected"
+    }
+  ]
+}

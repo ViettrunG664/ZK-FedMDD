@@ -1,0 +1,174 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.patient-container {
+  background-color: #ffffff;
+  padding: 38px 50px 38px 50px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.09);
+  width: 700px;
+  min-height: 800px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.patient-info {
+  background: #f6fefe;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 8px;
+  padding: 24px 26px;
+  margin-bottom: 8px;
+}
+
+.patient-info h2 {
+  color: #00796b;
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.label {
+  font-weight: bold;
+  color: #222;
+  min-width: 108px;
+  font-size: 1.1em;
+}
+
+.value {
+  font-size: 1.08em;
+  color: #00796b;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.departments-section h3 {
+  font-size: 1.2em;
+  color: #00796b;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 6px;
+  font-size: 1.1em;
+  background: #f6fefe;
+  color: #222;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.22s;
+  position: static;
+  top: unset;
+  z-index: unset;
+}
+
+.department-box {
+  background: #f6fefe;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 8px;
+  padding: 14px 14px 14px 14px;
+  max-height: 460px;
+  min-height: 460px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.departments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 230px;
+}
+
+.departments-list li {
+  background: #f6fefe;
+  border: 1px solid #b2dfdb;
+  border-radius: 7px;
+  margin-bottom: 15px;
+  padding: 13px 20px;
+  font-size: 1.08em;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.departments-list .dept-label {
+  font-weight: bold;
+  color: #00796b;
+  font-size: 1.08em;
+  margin-bottom: 2px;
+}
+
+.departments-list .record-count {
+  font-size: 1em;
+  color: #008080;
+  background: #e0f7fa;
+  border-radius: 18px;
+  padding: 3px 12px 3px 12px;
+  font-weight: bold;
+  margin-left: 12px;
+  min-width: 36px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+#patient-hash {
+  font-weight: bold;
+  color: #028080;
+  cursor: pointer;
+  white-space: nowrap;    /* tránh bị xuống dòng */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350px;       /* tùy chỉnh theo giao diện */
+  display: inline-block;
+  vertical-align: middle;
+}
+.copy-btn {
+  padding: 6px 18px;
+  background: linear-gradient(90deg, #19c3ae 0%, #47e1bc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(34, 180, 171, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  outline: none;
+}
+
+.copy-btn:hover {
+  background: linear-gradient(90deg, #17988e 0%, #15c39a 100%);
+  box-shadow: 0 4px 14px rgba(27, 180, 160, 0.18);
+  transform: translateY(-1px) scale(1.04);
+}
+
+.copy-btn:active {
+  background: #1cb095;
+  transform: scale(0.98);
+}

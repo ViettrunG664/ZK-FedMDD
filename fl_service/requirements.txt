@@ -1,0 +1,9 @@
+# Versions used for the reported runs (Python 3.12.10, CUDA 13.0)
+torch>=2.6
+numpy>=1.26
+pandas>=2.0
+scikit-learn>=1.4
+scipy>=1.11
+pyyaml>=6.0
+matplotlib>=3.8
+psutil>=5.9

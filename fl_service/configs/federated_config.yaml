@@ -1,0 +1,40 @@
+# Federated Learning (D-vlog clients)
+experiment:
+  version: "v10"
+  name: "Federated Learning (D-vlog)"
+
+federated:
+  num_rounds: 30
+  local_epochs: 3
+  shared_dim: 64        # Projection target dim (shared across clients)
+
+clients:
+  dvlog:
+    dataset_dir: "data/dvlog-dataset"
+    type: "dvlog"
+
+preprocessing:
+  max_seq_len: 64
+  segment_duration: 8.0
+  normalize: true
+  norm_method: "zscore"
+  windowing:
+    enabled: true
+    window_size: 32
+    stride: 16
+    pad_short: true
+
+model:
+  hidden_dim: 64
+  num_layers: 1
+  dropout: 0.4
+
+training:
+  batch_size: 16
+  learning_rate: 0.0005
+  weight_decay: 0.001
+  label_smoothing: 0.05
+  class_weight: true
+
+seed: 42
+device: "auto"

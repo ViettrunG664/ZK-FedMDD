@@ -1,0 +1,150 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.doctor-container {
+  background-color: #ffffff;
+  padding: 38px 50px 38px 50px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.09);
+  width: 700px;          /* giữ rộng như bạn mong muốn */
+  min-height: 800px;     /* Tăng chiều cao cho dài hơn (tùy ý chỉnh) */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.doctor-info {
+  background: #f6fefe;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 8px;
+  padding: 24px 26px;
+  margin-bottom: 8px;
+}
+
+.doctor-info h2 {
+  color: #00796b;
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.label {
+  font-weight: bold;
+  color: #222;
+  min-width: 108px;
+  font-size: 1.1em;
+}
+
+.value {
+  font-size: 1.08em;
+  color: #00796b;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.toggle-hash-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  transition: background 0.18s;
+  border-radius: 5px;
+}
+
+.toggle-hash-btn:hover {
+  background: #e0f7fa;
+}
+
+.toggle-hash-btn svg {
+  vertical-align: middle;
+  transition: stroke 0.22s;
+}
+
+.patients-section {
+  margin-top: 10px;
+}
+
+.patients-section h3 {
+  font-size: 1.2em;
+  color: #00796b;
+  margin-bottom: 18px;
+}
+.patients-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 260px;  /* luôn giữ box này tối thiểu cao 230px */
+}
+
+.patients-list li {
+  background: #f6fefe;
+  border: 1px solid #b2dfdb;
+  border-radius: 7px;
+  margin-bottom: 15px;
+  padding: 13px 20px;
+  font-size: 1.08em;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.patients-list .patient-hash {
+  color: #555;
+  font-size: 0.98em;
+  font-family: monospace;
+  margin-left: 6px;
+}
+
+.patient-box {
+  background: #f6fefe;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 8px;
+  padding: 14px 14px 14px 14px;
+  max-height: 440px;    /* Chiều cao cố định */
+  min-height: 440px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 6px;
+  font-size: 1.1em;
+  background: #f6fefe;
+  color: #222;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.22s;
+  position: static; /* không sticky nữa */
+  top: unset;
+  z-index: unset;
+}
+.search-input:focus {
+  border-color: #00796b;
+  background: #e0f7fa;
+}

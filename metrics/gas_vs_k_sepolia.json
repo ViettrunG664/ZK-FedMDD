@@ -1,0 +1,939 @@
+{
+  "network": "sepolia",
+  "date": "2026-11-02T15:42:49.944Z",
+  "relayer": "0xACeC27c7553F55603A3D45AA953E27c1c0911BA2",
+  "identityAccess": "0x071ff5512Db7a05a5cded1d8e979049418d64A43",
+  "federatedLearning": "0x7AD9baB5c0F4c9d47f812710f265f60cF2E9AE11",
+  "rounds": 2,
+  "register": {
+    "mean": 493314,
+    "min": 476994,
+    "max": 574914,
+    "n": 6
+  },
+  "perK": {
+    "2": {
+      "createTask": 2033534,
+      "joinTask": {
+        "mean": 494558,
+        "min": 494558,
+        "max": 494558,
+        "n": 1
+      },
+      "startRound": {
+        "mean": 149012,
+        "min": 51194,
+        "max": 246829,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 1433390,
+        "min": 1384415,
+        "max": 1482359,
+        "n": 4
+      },
+      "submitAggregation": {
+        "mean": 87472,
+        "min": 86199,
+        "max": 88745,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 3103264,
+        "min": 3006689,
+        "max": 3199838,
+        "n": 2
+      },
+      "setup": 2528092
+    },
+    "3": {
+      "createTask": 1935614,
+      "joinTask": {
+        "mean": 494534,
+        "min": 494534,
+        "max": 494534,
+        "n": 2
+      },
+      "startRound": {
+        "mean": 149012,
+        "min": 51194,
+        "max": 246829,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 1417077,
+        "min": 1384403,
+        "max": 1482371,
+        "n": 6
+      },
+      "submitAggregation": {
+        "mean": 87472,
+        "min": 86199,
+        "max": 88745,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 4487715,
+        "min": 4391200,
+        "max": 4584229,
+        "n": 2
+      },
+      "setup": 2924682
+    },
+    "4": {
+      "createTask": 1935614,
+      "joinTask": {
+        "mean": 494538,
+        "min": 494522,
+        "max": 494546,
+        "n": 3
+      },
+      "startRound": {
+        "mean": 149012,
+        "min": 51194,
+        "max": 246829,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 1408910,
+        "min": 1384415,
+        "max": 1482347,
+        "n": 8
+      },
+      "submitAggregation": {
+        "mean": 87472,
+        "min": 86199,
+        "max": 88745,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 5872124,
+        "min": 5775555,
+        "max": 5968692,
+        "n": 2
+      },
+      "setup": 3419228
+    },
+    "5": {
+      "createTask": 1935614,
+      "joinTask": {
+        "mean": 494552,
+        "min": 494534,
+        "max": 494558,
+        "n": 4
+      },
+      "startRound": {
+        "mean": 149012,
+        "min": 51194,
+        "max": 246829,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 1404019,
+        "min": 1384367,
+        "max": 1482371,
+        "n": 10
+      },
+      "submitAggregation": {
+        "mean": 87466,
+        "min": 86187,
+        "max": 88745,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 7256575,
+        "min": 7160090,
+        "max": 7353059,
+        "n": 2
+      },
+      "setup": 3913822
+    },
+    "6": {
+      "createTask": 1935614,
+      "joinTask": {
+        "mean": 494544,
+        "min": 494534,
+        "max": 494558,
+        "n": 5
+      },
+      "startRound": {
+        "mean": 149012,
+        "min": 51194,
+        "max": 246829,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 1400756,
+        "min": 1384415,
+        "max": 1482359,
+        "n": 12
+      },
+      "submitAggregation": {
+        "mean": 87472,
+        "min": 86199,
+        "max": 88745,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 8641020,
+        "min": 8544481,
+        "max": 8737558,
+        "n": 2
+      },
+      "setup": 4408332
+    }
+  },
+  "submitUpdateCalldataBytes": 548,
+  "proofCalldataBytes": 256,
+  "spentEth": "0.007887544283131465",
+  "txs": [
+    {
+      "fn": "register",
+      "i": 0,
+      "gas": 574914,
+      "calldataBytes": 132,
+      "tx": "0xe7b09ed9947c2ed3e2bf38552fdc9eb895d1d139999d2f95e6c08f42fb0edef4",
+      "block": 12049027
+    },
+    {
+      "fn": "register",
+      "i": 1,
+      "gas": 476994,
+      "calldataBytes": 132,
+      "tx": "0xf19013d7ecf9fdc0a3fcd05f4c26cead4e19c6265ed328c1a696b74b41062d96",
+      "block": 12049028
+    },
+    {
+      "fn": "register",
+      "i": 2,
+      "gas": 476994,
+      "calldataBytes": 132,
+      "tx": "0xaedac6a55a8dec0130a5389df62898cd360ce1a0eeee29ee4b9bdfe822f6ee30",
+      "block": 12049029
+    },
+    {
+      "fn": "register",
+      "i": 3,
+      "gas": 476994,
+      "calldataBytes": 132,
+      "tx": "0x549692a3645c4908653be4a4ff49b7a1015e585100d5d7fe61a0cf55b2a182f2",
+      "block": 12049030
+    },
+    {
+      "fn": "register",
+      "i": 4,
+      "gas": 476994,
+      "calldataBytes": 132,
+      "tx": "0x21d32c1ab6eaab6fba2f8c86d62056d249a8fa6ed93f5f057ac9841e6199b8cf",
+      "block": 12049031
+    },
+    {
+      "fn": "register",
+      "i": 5,
+      "gas": 476994,
+      "calldataBytes": 132,
+      "tx": "0x08c360a04263647b6f5013dc5395920e6af99e4130623fe77771e5f24772215e",
+      "block": 12049032
+    },
+    {
+      "fn": "createTask",
+      "K": 2,
+      "gas": 2033534,
+      "calldataBytes": 676,
+      "tx": "0x810bebcea85c782da0261bce13dc1d281c9120c8efc1918f539a85cf4d7e8a70",
+      "block": 12049033
+    },
+    {
+      "fn": "joinTask",
+      "K": 2,
+      "gas": 494558,
+      "calldataBytes": 324,
+      "tx": "0xf6cd116eb2d04233207e21b8c4d4f13e3308f04078f7c509baf3927246fe25db",
+      "block": 12049034
+    },
+    {
+      "fn": "startRound",
+      "K": 2,
+      "round": 1,
+      "gas": 246829,
+      "calldataBytes": 36,
+      "tx": "0xa01f797ec3ea28ddd352c6a38c656ba5a018d09df9d047a63395cef31fe9ead2",
+      "block": 12049035
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 1,
+      "gas": 1482359,
+      "calldataBytes": 548,
+      "tx": "0xee2c67e807065123a29ca3de669b069cdd3b28803051fbd9d554738c4ceb8c9e",
+      "block": 12049036
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0xe26d75181abf684e1d80d45ceaae670cbe782685c7ed4994cd03c385631bcfea",
+      "block": 12049037
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 2,
+      "round": 1,
+      "gas": 86199,
+      "calldataBytes": 196,
+      "tx": "0x6100a714efb1dbd94fa617535845e8304bc107104296939fa1899a953a929394",
+      "block": 12049038
+    },
+    {
+      "fn": "startRound",
+      "K": 2,
+      "round": 2,
+      "gas": 51194,
+      "calldataBytes": 36,
+      "tx": "0xaba8bbc8dfb02949092ed45afa1159907cc67482416b0c6c81c34dd290494f23",
+      "block": 12049039
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 2,
+      "gas": 1482335,
+      "calldataBytes": 548,
+      "tx": "0x419bfcd01809fbc34aa25a039601f39173268cd2c78f25d54dfe33969d9c48b8",
+      "block": 12049040
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 2,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0x016c76a564a159161d258c124ac7b887185fcadafd90c87e934bde7c62042134",
+      "block": 12049041
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 2,
+      "round": 2,
+      "gas": 88745,
+      "calldataBytes": 196,
+      "tx": "0xec781bb120ebffdbe343b5c5ed9bf5dc75beac367297cb64ad39f35a23c9334c",
+      "block": 12049042
+    },
+    {
+      "fn": "createTask",
+      "K": 3,
+      "gas": 1935614,
+      "calldataBytes": 676,
+      "tx": "0xe30c16375c3d07d7b327537f7dfec2e88b9322774ae61c139032d0f705844b48",
+      "block": 12049043
+    },
+    {
+      "fn": "joinTask",
+      "K": 3,
+      "gas": 494534,
+      "calldataBytes": 324,
+      "tx": "0x299432f8e8d41b567be811a17b5eead1fc870f31065a3810f17ee07a2ddc4d3f",
+      "block": 12049044
+    },
+    {
+      "fn": "joinTask",
+      "K": 3,
+      "gas": 494534,
+      "calldataBytes": 324,
+      "tx": "0x92d315c50ddea0113c66b6e4dc39af19e1fc5541bd8495c53a0cd79cf3775a85",
+      "block": 12049045
+    },
+    {
+      "fn": "startRound",
+      "K": 3,
+      "round": 1,
+      "gas": 246829,
+      "calldataBytes": 36,
+      "tx": "0x522a0b000d7f5bcf4cabb47f492fef7d9f34c5b54226b13afdd468db765bb95f",
+      "block": 12049046
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 1482371,
+      "calldataBytes": 548,
+      "tx": "0x37ee5476cb2b53b86428b069b058e78e092bb95a6260838dc6d26a66d3575109",
+      "block": 12049047
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 1384403,
+      "calldataBytes": 548,
+      "tx": "0x5be415b2b93926af2bf20f947d5a52a993ec780ec7d4773fcdfdaa4ffa007323",
+      "block": 12049048
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 1384427,
+      "calldataBytes": 548,
+      "tx": "0xeafec25ead943bd4c7091ce262a64bb3010df283c75021a6decac4bc9643d7ae",
+      "block": 12049049
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 3,
+      "round": 1,
+      "gas": 86199,
+      "calldataBytes": 196,
+      "tx": "0x8438c7c5a223db54720b66b907d080e116241193c823524cf5acece997338490",
+      "block": 12049050
+    },
+    {
+      "fn": "startRound",
+      "K": 3,
+      "round": 2,
+      "gas": 51194,
+      "calldataBytes": 36,
+      "tx": "0x1c17ea01cfceb0f74e44371e19f010fc87310871e0030d789650ffc7f3b0632b",
+      "block": 12049051
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 1482371,
+      "calldataBytes": 548,
+      "tx": "0x9b4cfc158ed2e82dadade2176428fd7d1173bc3509f33b86a77ef356c4fbe1d6",
+      "block": 12049052
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x040e93010dcf112786b95a8863a4f6681de4b8d87bb30e99c93e8bd8293dab53",
+      "block": 12049053
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 1384439,
+      "calldataBytes": 548,
+      "tx": "0x8cefe250f56287b2130d328ac267d62c166f7fac1ad5a9bc0c30804a6e32510d",
+      "block": 12049054
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 3,
+      "round": 2,
+      "gas": 88745,
+      "calldataBytes": 196,
+      "tx": "0x79fb2c14a0fb21b49d7fb9f7e128594ff8305bf21269b0d090981687a5513866",
+      "block": 12049055
+    },
+    {
+      "fn": "createTask",
+      "K": 4,
+      "gas": 1935614,
+      "calldataBytes": 676,
+      "tx": "0x0ead9c2d2a7a9f55e40b435481492d86e2da943cd806653755b769fc0c9f628a",
+      "block": 12049056
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 494522,
+      "calldataBytes": 324,
+      "tx": "0xd7b49738d8782b9d9033cea2662c509815b9510365324c349013c300e63bfb2c",
+      "block": 12049057
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 494546,
+      "calldataBytes": 324,
+      "tx": "0x53bddb5b5103550272304f32e391ebf554b463d48b1c1e907b06171ec331edd3",
+      "block": 12049058
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 494546,
+      "calldataBytes": 324,
+      "tx": "0x4630c4c2ba4718508961b6669dcf9b53a57a562b0a2209191b000dec26ceb5e7",
+      "block": 12049059
+    },
+    {
+      "fn": "startRound",
+      "K": 4,
+      "round": 1,
+      "gas": 246829,
+      "calldataBytes": 36,
+      "tx": "0x9dce7d149d04e14b54e64d1f7e48533640232fe16f940294634c1b9e42456c22",
+      "block": 12049060
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 1482347,
+      "calldataBytes": 548,
+      "tx": "0xc7a04c9165248144595afac63fac1730535f271127b91b7f67912763d6b1cbd1",
+      "block": 12049061
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0x5af95104246aae1516c15ab96fab50febd53fa0667f8f211ce1f896be528ba21",
+      "block": 12049062
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x26d903120d3980360fca26c952f8b2e4bf797105766ce6d371e2c337b61d942c",
+      "block": 12049063
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x7bc7b0c5909cad5a6b99c19ee4b0fedb8c71dd519c742676444c36dbc1cdd943",
+      "block": 12049064
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 4,
+      "round": 1,
+      "gas": 86199,
+      "calldataBytes": 196,
+      "tx": "0xe752256ab1715f6cc705378c583af0ea80dce5e1273b2e881fbf4b1755bf1005",
+      "block": 12049065
+    },
+    {
+      "fn": "startRound",
+      "K": 4,
+      "round": 2,
+      "gas": 51194,
+      "calldataBytes": 36,
+      "tx": "0x4a6a4d176a180c05c16b1a0ac485d2048aa4f43e8be0ddc3e85c215a5096ed32",
+      "block": 12049066
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 1482347,
+      "calldataBytes": 548,
+      "tx": "0xe97dfe1a3e1d46dc11a976a3e9bedda7fc83d4d76c4279c716bff57da0bb35db",
+      "block": 12049067
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 1384427,
+      "calldataBytes": 548,
+      "tx": "0x7975b08ecdd5bb1ad36dfd22f40dfb87c60c0826b3d1969e74da07f9fc83ec64",
+      "block": 12049068
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 1384427,
+      "calldataBytes": 548,
+      "tx": "0x3a10c2b1228729df6a880282c67443ae8ec96779c4891e1ee91aebcb2364e082",
+      "block": 12049069
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0x8d865f54f9c9a133a7098324d492764e72113636bc023373127ab85e344d3ec6",
+      "block": 12049070
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 4,
+      "round": 2,
+      "gas": 88745,
+      "calldataBytes": 196,
+      "tx": "0xa4da5a12eed6f37db764203dfef0351d557fa7de01916ad853e4e2dbce6eb0e4",
+      "block": 12049071
+    },
+    {
+      "fn": "createTask",
+      "K": 5,
+      "gas": 1935614,
+      "calldataBytes": 676,
+      "tx": "0xfbd75592057be0e5f0acebb59289d27886ddbf0a911e7f538d3b7c8ef3d1cbe7",
+      "block": 12049072
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 494558,
+      "calldataBytes": 324,
+      "tx": "0xe3a65791951fc6573f074ec57d5fcdfa1a811e2d8a310ab8383080a65ba426bc",
+      "block": 12049073
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 494558,
+      "calldataBytes": 324,
+      "tx": "0xa707037f7f0577e541d9af99eaf54a8a04ce122e032472df5d1de84ea6378ed9",
+      "block": 12049074
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 494558,
+      "calldataBytes": 324,
+      "tx": "0xb020f69ccc686f665f50f3772f4a12d38c7994c2b64a260c439548b63531fc20",
+      "block": 12049075
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 494534,
+      "calldataBytes": 324,
+      "tx": "0xd1006704c28d129198dd6c421ecd0c798c84682aa94edb49158810ad00d226cb",
+      "block": 12049076
+    },
+    {
+      "fn": "startRound",
+      "K": 5,
+      "round": 1,
+      "gas": 246829,
+      "calldataBytes": 36,
+      "tx": "0x999e24a13582c2a1e2f91eb0fa631aba1a28eebd52ab18fd595d79a5160eb26d",
+      "block": 12049077
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 1482347,
+      "calldataBytes": 548,
+      "tx": "0xb247344827a1e030a4aab7271ff49df6f346a1ae5ea1aabe346cf997a5c1d878",
+      "block": 12049078
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 1384367,
+      "calldataBytes": 548,
+      "tx": "0x00150da49017c8a1c771277f719048ab81e3a9f02b700ca228590d37c934f05e",
+      "block": 12049079
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 1384439,
+      "calldataBytes": 548,
+      "tx": "0x50ac6e2fe2ca36a4884ebdd92a20854c342149571453e930b84c9bc1164d034b",
+      "block": 12049080
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x90b2000339da95ff4005119b02c9376b4c839d6bbc92aab9ca74a8d36127762b",
+      "block": 12049081
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 1384439,
+      "calldataBytes": 548,
+      "tx": "0xbf4b46855ee6b3c0d1dd11151a0a68853b5d136a98223467af8f275e34489936",
+      "block": 12049082
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 5,
+      "round": 1,
+      "gas": 86187,
+      "calldataBytes": 196,
+      "tx": "0x3819f18f3af7bed8522fb017523613e1061d2fc5436068af9a895a28787039a2",
+      "block": 12049083
+    },
+    {
+      "fn": "startRound",
+      "K": 5,
+      "round": 2,
+      "gas": 51194,
+      "calldataBytes": 36,
+      "tx": "0x179f9879eb15480506f091806c1e58bf3da821ec0d679ffc3f8f0d79caf23469",
+      "block": 12049084
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 1482371,
+      "calldataBytes": 548,
+      "tx": "0x612049ac17d8b168ff9f6c45a647eb9c42050c0132c49eb65a057aac51d2a45c",
+      "block": 12049085
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 1384439,
+      "calldataBytes": 548,
+      "tx": "0x173bcea30d749bc7733c2f02f264a8c76765fd5608ff503b27c104a31ab7b43d",
+      "block": 12049086
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 1384439,
+      "calldataBytes": 548,
+      "tx": "0x01193e99fcda4d43136fdd05dc9d16cddca659fe94eef0cda672197a1cc257c1",
+      "block": 12049087
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0xd9ca6fb7f19a3cae3523ad438e7def23a1cf491f8d51fb92f444c08b85fdba81",
+      "block": 12049088
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x30d87b5c370a80b92dfaa8b760d49ed32e43c5bf6341ff54ae347bc2042b4e4f",
+      "block": 12049089
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 5,
+      "round": 2,
+      "gas": 88745,
+      "calldataBytes": 196,
+      "tx": "0xb2f3b389160a96dd833d70ef1ea4a7c6de5403c084ab2d8605d78fc07e6d5116",
+      "block": 12049090
+    },
+    {
+      "fn": "createTask",
+      "K": 6,
+      "gas": 1935614,
+      "calldataBytes": 676,
+      "tx": "0x999dbd6075e2d7db162c95b11adc089a57cdc5c1e52106bf8bfb030749f64ca4",
+      "block": 12049091
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 494546,
+      "calldataBytes": 324,
+      "tx": "0xb41666604d3fa674d3ea88ff0310258fe00f3c59b79814273df928d638942256",
+      "block": 12049092
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 494546,
+      "calldataBytes": 324,
+      "tx": "0xff3db6af6ab0cceb5e0e6bdef3f8feef90ca530dcdcf8a25838dfa33ecf7dd5a",
+      "block": 12049093
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 494558,
+      "calldataBytes": 324,
+      "tx": "0x4f6f3c9e9c449afbef27ef8aa3fc476d982a883fd7518db87e725ca2caa8d81c",
+      "block": 12049094
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 494534,
+      "calldataBytes": 324,
+      "tx": "0x5063028fcab7134cca591df5f48cddd7511eed521cf927fc4b248bd402e24950",
+      "block": 12049095
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 494534,
+      "calldataBytes": 324,
+      "tx": "0x291e062941a0f7735e00c6b3e3fe6308a315e2bc7ae51846ee967cf39f61a1e2",
+      "block": 12049096
+    },
+    {
+      "fn": "startRound",
+      "K": 6,
+      "round": 1,
+      "gas": 246829,
+      "calldataBytes": 36,
+      "tx": "0x3b890f4887bef984e9c2d82a91cf8175010c70e5882745e92eb784d66fd2acfa",
+      "block": 12049097
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1482335,
+      "calldataBytes": 548,
+      "tx": "0x29dc73b91cc297b9addba88b6f332d245c2c2fedfee713af6feb100d49d9da17",
+      "block": 12049098
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x3b2f9abcd7ef54ae40dc1f74e3cc278c1b6afc07dd1f808ee103e96ff527c95a",
+      "block": 12049099
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x4feba1b4e15e6c57df6664d10391b99e816e802e45e551352747b1fe04c6cf85",
+      "block": 12049100
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1384427,
+      "calldataBytes": 548,
+      "tx": "0x1a643e0d6ee8d022672934800fdd25288098b3ae847c664b6b66d300e1c5d3a6",
+      "block": 12049101
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x359e5adf893c59658131fc4987eabfed00a4b497834f7a55334e3e8b9fdb4199",
+      "block": 12049102
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0x447cc12dd7b4bf2b59e4746c8dff4fef15424f82ae7b8f7b12699bb38e86015d",
+      "block": 12049103
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 6,
+      "round": 1,
+      "gas": 86199,
+      "calldataBytes": 196,
+      "tx": "0x15fe723e2385c6e03b590ce3cf87151d46d027563baf9564b10e39d9afe398eb",
+      "block": 12049104
+    },
+    {
+      "fn": "startRound",
+      "K": 6,
+      "round": 2,
+      "gas": 51194,
+      "calldataBytes": 36,
+      "tx": "0xca2c231a12df23b91dd4a62a5455f4aa37a0dc4b01099eeecc07afec3fac9af4",
+      "block": 12049105
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1482359,
+      "calldataBytes": 548,
+      "tx": "0x8fa991f910ffc2d26299cc2ce4ec1cfba11ae4195dc781d2e33e9aad9f77e967",
+      "block": 12049106
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x1eb761afad36fabbfc7add0744108258a59bc4313603ddde7f03062881231147",
+      "block": 12049107
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0x7c279d6c9791c7ed2612603c1b35147badc943c464b147ecd942801f55c13c13",
+      "block": 12049108
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0x73f87bfa0d81d4ea1ed0a6f0c4d3b36a5b25903599a4a57c58792dda5665c53e",
+      "block": 12049109
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1384415,
+      "calldataBytes": 548,
+      "tx": "0xa0465ce0adc1ae4f8d34e831d56347ee0ebec4815dca38b52b1af5577db16238",
+      "block": 12049110
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 1384451,
+      "calldataBytes": 548,
+      "tx": "0xf5af2e3f30b5a74bde2f37dc9b3ad1be11d9a5115ed8708e60931f679c3a6053",
+      "block": 12049111
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 6,
+      "round": 2,
+      "gas": 88745,
+      "calldataBytes": 196,
+      "tx": "0x13020dbe4015b0c8742bc316bfa32f6c1f1c5efdfbf86e1b8dec917520ae565e",
+      "block": 12049112
+    }
+  ]
+}

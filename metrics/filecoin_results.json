@@ -1,0 +1,106 @@
+{
+  "config": {
+    "num_runs": 10,
+    "timestamp": "2025-11-27T07:37:40.992Z"
+  },
+  "success_rate": 100,
+  "num_success": 10,
+  "num_failed": 0,
+  "raw_results": [
+    {
+      "run": 1,
+      "success": true,
+      "latency_ms": 1276,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreidlvgntbkibo5kk2d57zzhkvjwpwgjokowrj6lp24douu6pzezjwu"
+    },
+    {
+      "run": 2,
+      "success": true,
+      "latency_ms": 238,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreigjstz6brgb2jn6sqdxlnixemu4tcrbb4mpp6h6gs2rbqhgejiyte"
+    },
+    {
+      "run": 3,
+      "success": true,
+      "latency_ms": 234,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreib2opqankpixmnx46v2pvbcxewugajwark3h5xhl4wilqyl37pqze"
+    },
+    {
+      "run": 4,
+      "success": true,
+      "latency_ms": 246,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreievtjbulp76kyhd62brp7rehaerena5uepqpvpmkde24frfx7ovzy"
+    },
+    {
+      "run": 5,
+      "success": true,
+      "latency_ms": 242,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreidyjggq6lnx4kamdz65yce7hrlertqvakh3oe7klvdpc76uyu6mvy"
+    },
+    {
+      "run": 6,
+      "success": true,
+      "latency_ms": 225,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreifpsurdo4yswxarpveapxt5wkteo4wksnidaiyfulfo2z3podgvme"
+    },
+    {
+      "run": 7,
+      "success": true,
+      "latency_ms": 226,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreiajfceh3pkwxrivbt7pz2534gwlyyr7hhcnc6mpmj53lircdtn6sq"
+    },
+    {
+      "run": 8,
+      "success": true,
+      "latency_ms": 230,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreiec344yyaek6rjq2hk36fbe6k3vkvhyrj43ryia4iqmgxtv2dvycq"
+    },
+    {
+      "run": 9,
+      "success": true,
+      "latency_ms": 241,
+      "size_bytes": 318,
+      "provider": "lighthouse",
+      "cid": "bafkreibatcuzu7eagiehbpmwujj5xrj6wuu7crpxnn3s6pfynydgrys77e"
+    },
+    {
+      "run": 10,
+      "success": true,
+      "latency_ms": 245,
+      "size_bytes": 319,
+      "provider": "lighthouse",
+      "cid": "bafkreicvp2bwjdae45p23vtqy6j4nqavues23iv7o4s2huzzpmrfn7dtou"
+    }
+  ],
+  "upload_latency": {
+    "mean": 340.3,
+    "median": 239.5,
+    "min": 225,
+    "max": 1276,
+    "p50": 241,
+    "p95": 1276,
+    "p99": 1276
+  },
+  "file_size": {
+    "mean": 318.1,
+    "median": 318,
+    "min": 318,
+    "max": 319
+  }
+}

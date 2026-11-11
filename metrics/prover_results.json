@@ -1,0 +1,343 @@
+{
+  "num_runs": 50,
+  "num_failed": 0,
+  "warmup": 2,
+  "context": "submitUpdate (taskId=1, round=1..30, random 256-bit payload)",
+  "hardware": {
+    "platform": "Windows-11-10.0.26100-SP0",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "physical_cores": 14,
+    "logical_cores": 20,
+    "ram_gb": 23.7,
+    "python": "3.12.10",
+    "node": "v24.7.0"
+  },
+  "circuit": {
+    "constraints": 418,
+    "wires": 423,
+    "private_inputs": 1,
+    "public_inputs": 3,
+    "outputs": 1
+  },
+  "last_proof_verifies": true,
+  "latency_ms": {
+    "mean": 2369.3915380002,
+    "median": 1662.4478500161786,
+    "std": 3858.026872306759,
+    "min": 1531.7917999927886,
+    "max": 27470.743499987293,
+    "p95": 1893.204500025604,
+    "p99": 27470.743499987293
+  },
+  "peak_rss_mb": {
+    "mean": 474.8821875,
+    "max": 476.53515625
+  },
+  "proof_size": {
+    "proof_json_bytes": 804,
+    "public_json_bytes": 179,
+    "calldata_bytes": 256
+  },
+  "raw_data": [
+    {
+      "latency_ms": 1629.4449000270106,
+      "peak_rss_mb": 475.2734375,
+      "proof_size_bytes": 803,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1787.3137000133283,
+      "peak_rss_mb": 474.76953125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1893.204500025604,
+      "peak_rss_mb": 473.63671875,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1860.9224999672733,
+      "peak_rss_mb": 476.48046875,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1752.3154999944381,
+      "peak_rss_mb": 476.02734375,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1698.8838000106625,
+      "peak_rss_mb": 475.0390625,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1856.7830999963917,
+      "peak_rss_mb": 475.19921875,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1730.7785000302829,
+      "peak_rss_mb": 473.8359375,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1649.4891999755055,
+      "peak_rss_mb": 473.87109375,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1681.7171000293456,
+      "peak_rss_mb": 475.12890625,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1626.7335999873467,
+      "peak_rss_mb": 475.4453125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 179
+    },
+    {
+      "latency_ms": 1591.448599996511,
+      "peak_rss_mb": 474.47265625,
+      "proof_size_bytes": 802,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1643.142499960959,
+      "peak_rss_mb": 474.140625,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1579.9401000258513,
+      "peak_rss_mb": 474.234375,
+      "proof_size_bytes": 803,
+      "public_size_bytes": 179
+    },
+    {
+      "latency_ms": 1564.8740999749862,
+      "peak_rss_mb": 474.57421875,
+      "proof_size_bytes": 808,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1579.146500036586,
+      "peak_rss_mb": 475.88671875,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1531.7917999927886,
+      "peak_rss_mb": 474.4765625,
+      "proof_size_bytes": 803,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1569.811600027606,
+      "peak_rss_mb": 474.75390625,
+      "proof_size_bytes": 807,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 27470.743499987293,
+      "peak_rss_mb": 474.171875,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 11036.65500000352,
+      "peak_rss_mb": 476.05078125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1608.4494999959134,
+      "peak_rss_mb": 476.53515625,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1584.2979999724776,
+      "peak_rss_mb": 476.1640625,
+      "proof_size_bytes": 802,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1566.550699993968,
+      "peak_rss_mb": 476.12890625,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1561.169599997811,
+      "peak_rss_mb": 474.5703125,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1570.5535000306554,
+      "peak_rss_mb": 475.0234375,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1585.2229000302032,
+      "peak_rss_mb": 474.38671875,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1603.074899991043,
+      "peak_rss_mb": 475.42578125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1590.4224999831058,
+      "peak_rss_mb": 474.1796875,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1578.8570999866351,
+      "peak_rss_mb": 475.4296875,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1657.4486999888904,
+      "peak_rss_mb": 473.33203125,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1579.098999965936,
+      "peak_rss_mb": 474.2421875,
+      "proof_size_bytes": 802,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1611.1641000024974,
+      "peak_rss_mb": 474.93359375,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1587.4625000287779,
+      "peak_rss_mb": 475.1953125,
+      "proof_size_bytes": 801,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1595.1803000061773,
+      "peak_rss_mb": 475.453125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1639.8920000065118,
+      "peak_rss_mb": 473.18359375,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1794.7250999859534,
+      "peak_rss_mb": 475.93359375,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1761.607400025241,
+      "peak_rss_mb": 474.01171875,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 175
+    },
+    {
+      "latency_ms": 1700.2943999832496,
+      "peak_rss_mb": 473.8671875,
+      "proof_size_bytes": 803,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1764.1349000041373,
+      "peak_rss_mb": 475.2421875,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 179
+    },
+    {
+      "latency_ms": 1692.0110000064597,
+      "peak_rss_mb": 475.80859375,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1676.2766999891028,
+      "peak_rss_mb": 474.484375,
+      "proof_size_bytes": 803,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1745.0567999621853,
+      "peak_rss_mb": 475.49609375,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1731.7251000204124,
+      "peak_rss_mb": 473.18359375,
+      "proof_size_bytes": 802,
+      "public_size_bytes": 176
+    },
+    {
+      "latency_ms": 1667.4470000434667,
+      "peak_rss_mb": 476.203125,
+      "proof_size_bytes": 808,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1777.5863999850117,
+      "peak_rss_mb": 475.25,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 179
+    },
+    {
+      "latency_ms": 1681.639600021299,
+      "peak_rss_mb": 474.3515625,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 179
+    },
+    {
+      "latency_ms": 1790.8372999518178,
+      "peak_rss_mb": 474.015625,
+      "proof_size_bytes": 799,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1679.4845000258647,
+      "peak_rss_mb": 474.21875,
+      "proof_size_bytes": 801,
+      "public_size_bytes": 178
+    },
+    {
+      "latency_ms": 1672.881199978292,
+      "peak_rss_mb": 475.265625,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 177
+    },
+    {
+      "latency_ms": 1679.8840999836102,
+      "peak_rss_mb": 475.125,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 179
+    }
+  ]
+}

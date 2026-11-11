@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=700, initial-scale=1.0" />
+  <title>Patient Page</title>
+  <link rel="stylesheet" href="patientpage.css" />
+</head>
+<body>
+  <div class="patient-container">
+    <!-- Patient Info -->
+    <div class="patient-info">
+      <h2>Patient Information</h2>
+      <div class="info-row">
+        <span class="label">Hash ID:</span>
+        <span class="value" id="patient-hash">A1B2C3D4E5F6G7...</span>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('patient-hash').title)">Copy</button>
+      </div>
+      <div class="info-row">
+        <span class="label">Order:</span>
+        <span class="value" id="patient-order">#2</span>
+      </div>
+    </div>
+
+    <!-- Danh sách khoa và số hồ sơ -->
+    <div class="departments-section">
+      <h3>Departments & Medical Records</h3>
+      <input type="text" id="search-department" class="search-input" placeholder="Search department...">
+      <div class="department-box">
+        <ul class="departments-list" id="departments-list">
+          <!-- Render bằng JS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script src="patientpage.js"></script>
+</body>
+</html>

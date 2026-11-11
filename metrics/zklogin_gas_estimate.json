@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-11-27T07:28:03.315Z",
+  "network": "sepolia",
+  "method": "estimateGas",
+  "gas_estimate": 33005,
+  "cost_scenarios": [
+    {
+      "scenario": "1 gwei (Sepolia low)",
+      "gas_price_gwei": 1,
+      "cost_eth": 0.000033005,
+      "cost_usd_at_2000": 0.06601
+    },
+    {
+      "scenario": "5 gwei (Sepolia normal)",
+      "gas_price_gwei": 5,
+      "cost_eth": 0.000165025,
+      "cost_usd_at_2000": 0.33005
+    },
+    {
+      "scenario": "20 gwei (Sepolia high)",
+      "gas_price_gwei": 20,
+      "cost_eth": 0.0006601,
+      "cost_usd_at_2000": 1.3202
+    },
+    {
+      "scenario": "30 gwei (Mainnet normal)",
+      "gas_price_gwei": 30,
+      "cost_eth": 0.00099015,
+      "cost_usd_at_2000": 1.9803
+    },
+    {
+      "scenario": "50 gwei (Mainnet high)",
+      "gas_price_gwei": 50,
+      "cost_eth": 0.00165025,
+      "cost_usd_at_2000": 3.3005
+    }
+  ],
+  "note": "This is an estimate. zkLogin is a view function and costs 0 gas when called from frontend."
+}

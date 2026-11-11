@@ -1,0 +1,82 @@
+% ---- Table 3: main results, 10 seeds ----
+Centralized & $0.681\pm0.024$ & $0.760\pm0.014$ & $0.744\pm0.016$ & $0.871\pm0.048$ & $0.418\pm0.101$ \\
+FedAvg, $K=2$ & $0.663\pm0.010$ & $0.750\pm0.014$ & $0.735\pm0.017$ & $0.874\pm0.070$ & $0.372\pm0.110$ \\
+FedAvg, $K=3$ & $0.663\pm0.013$ & $0.742\pm0.020$ & $0.731\pm0.015$ & $0.840\pm0.072$ & $0.419\pm0.102$ \\
+FedAvg, $K=4$ & $0.657\pm0.016$ & $0.738\pm0.023$ & $0.722\pm0.023$ & $0.840\pm0.076$ & $0.403\pm0.102$ \\
+FedAvg, $K=5$ & $0.666\pm0.014$ & $0.733\pm0.027$ & $0.729\pm0.021$ & $0.797\pm0.086$ & $0.485\pm0.105$ \\
+FedAvg, $K=6$ & $0.662\pm0.012$ & $0.738\pm0.026$ & $0.731\pm0.014$ & $0.827\pm0.088$ & $0.434\pm0.114$ \\
+FedAvg + CL (EWC + replay) & $0.668\pm0.012$ & $0.752\pm0.012$ & $0.731\pm0.014$ & $0.869\pm0.042$ & $0.389\pm0.057$ \\
+% centralized: acc CI95 [0.6634, 0.6979] n=10
+% fedavg_k2: acc CI95 [0.6559, 0.6701] n=10
+% fedavg_k3: acc CI95 [0.6538, 0.6726] n=10
+% fedavg_k4: acc CI95 [0.6451, 0.6684] n=10
+% fedavg_k5: acc CI95 [0.6561, 0.6766] n=10
+% fedavg_k6: acc CI95 [0.6535, 0.6709] n=10
+% fedavg_cl: acc CI95 [0.6594, 0.6760] n=10
+% FedAvg-centralized Accuracy: diff -0.0239..-0.0143  Holm t p 0.300..0.300  Holm Wilcoxon p 0.234..0.422
+% FedAvg-centralized F1-Score: diff -0.0267..-0.0100  Holm t p 0.113..0.122  Holm Wilcoxon p 0.137..0.168
+% FedAvg-centralized AUC: diff -0.0224..-0.0095  Holm t p 0.246..0.301  Holm Wilcoxon p 0.322..0.336
+% FedAvg-centralized Recall: diff -0.0733..+0.0028  Holm t p 0.310..0.922  Holm Wilcoxon p 0.527..0.967
+% FedAvg-centralized Specificity: diff -0.0461..+0.0672  Holm t p 1.000..1.000  Holm Wilcoxon p 1.000..1.000
+% trend Accuracy: slope +0.00015/K p=0.908 r=0.017 n=50
+% trend F1-Score: slope -0.00332/K p=0.139 r=-0.212 n=50
+% trend AUC: slope -0.00084/K p=0.645 r=-0.067 n=50
+
+% ---- Operating point and review cost (summed confusion matrices) ----
+Centralized & $0.871$ & $0.418$ & $0.674$ & $0.48$ & $75.0$ & $0.143$ & $0.540$ & $0.755$ \\   % prevalence 0.580
+FedAvg, $K=2$ & $0.874$ & $0.372$ & $0.658$ & $0.52$ & $77.1$ & $0.134$ & $0.499$ & $0.724$ \\   % prevalence 0.580
+FedAvg, $K=3$ & $0.840$ & $0.419$ & $0.666$ & $0.50$ & $73.1$ & $0.138$ & $0.494$ & $0.725$ \\   % prevalence 0.580
+FedAvg, $K=4$ & $0.840$ & $0.403$ & $0.660$ & $0.51$ & $73.8$ & $0.135$ & $0.494$ & $0.709$ \\   % prevalence 0.580
+FedAvg, $K=5$ & $0.797$ & $0.485$ & $0.682$ & $0.47$ & $67.9$ & $0.147$ & $0.498$ & $0.719$ \\   % prevalence 0.580
+FedAvg, $K=6$ & $0.827$ & $0.434$ & $0.669$ & $0.49$ & $71.7$ & $0.140$ & $0.498$ & $0.720$ \\   % prevalence 0.580
+FedAvg + CL (EWC + replay) & $0.869$ & $0.389$ & $0.663$ & $0.51$ & $76.1$ & $0.137$ & $0.494$ & $0.737$ \\   % prevalence 0.580
+
+% ---- Learning dynamics: selected round, train-val gap at the selected round ----
+% fedavg_k2: best round 1.3 (range 1-2), per-shard gap mean -0.0114 min -0.0490 max +0.0298
+% fedavg_k3: best round 1.8 (range 1-2), per-shard gap mean -0.0094 min -0.0738 max +0.0395
+% fedavg_k4: best round 2.3 (range 1-3), per-shard gap mean -0.0213 min -0.0897 max +0.0447
+% fedavg_k5: best round 2.9 (range 2-4), per-shard gap mean -0.0167 min -0.1053 max +0.1122
+% fedavg_k6: best round 3.8 (range 2-5), per-shard gap mean -0.0143 min -0.1160 max +0.0626
+% centralized: best epoch by val F1 mean 9.0 range 2-17
+
+% ---- Heterogeneity table ----
+% IID, K=2..6 pooled over K, first five seeds
+IID & 2--6 & FedAvg & $0.662\pm0.013$ & $0.726\pm0.016$ & $0.430\pm0.127$ \\
+IID & 2--6 & FedProx, $\mu=0.01$ & $0.666\pm0.015$ & $0.731\pm0.018$ & $0.429\pm0.106$ \\
+IID & 2--6 & FedProx, $\mu=0.1$ & $0.674\pm0.012$ & $0.731\pm0.015$ & $0.466\pm0.064$ \\
+Dirichlet $\alpha=0.5$ & 3 & FedAvg & $0.650\pm0.027$ & $0.692\pm0.031$ & $0.375\pm0.092$ \\
+Dirichlet $\alpha=0.5$ & 3 & FedProx, $\mu=0.01$ & $0.635\pm0.016$ & $0.708\pm0.019$ & $0.300\pm0.034$ \\
+Dirichlet $\alpha=0.5$ & 6 & FedAvg & $0.643\pm0.013$ & $0.683\pm0.029$ & $0.373\pm0.066$ \\
+Dirichlet $\alpha=0.5$ & 6 & FedProx, $\mu=0.01$ & $0.639\pm0.008$ & $0.684\pm0.022$ & $0.403\pm0.149$ \\
+Dirichlet $\alpha=0.1$ & 3 & FedAvg & $0.627\pm0.049$ & $0.638\pm0.105$ & $0.249\pm0.228$ \\
+Dirichlet $\alpha=0.1$ & 3 & FedProx, $\mu=0.01$ & $0.614\pm0.042$ & $0.626\pm0.121$ & $0.215\pm0.163$ \\
+Dirichlet $\alpha=0.1$ & 6 & FedAvg & $0.583\pm0.015$ & $0.573\pm0.057$ & $0.091\pm0.112$ \\
+Dirichlet $\alpha=0.1$ & 6 & FedProx, $\mu=0.01$ & $0.589\pm0.040$ & $0.551\pm0.107$ & $0.131\pm0.150$ \\
+Device shift & 3 & Pooled scaler & $0.658\pm0.018$ & $0.725\pm0.024$ & $0.366\pm0.030$ \\
+Device shift & 3 & Per-facility scaler & $0.662\pm0.013$ & $0.726\pm0.016$ & $0.444\pm0.127$ \\
+Device shift & 6 & Pooled scaler & $0.651\pm0.011$ & $0.706\pm0.015$ & $0.397\pm0.057$ \\
+Device shift & 6 & Per-facility scaler & $0.665\pm0.012$ & $0.728\pm0.017$ & $0.471\pm0.125$ \\
+% fedprox_vs_fedavg Accuracy: fedprox_mu0.01_k2: +0.0075 (p_holm 1.000), fedprox_mu0.01_k3: +0.0123 (p_holm 1.000), fedprox_mu0.01_k4: +0.0019 (p_holm 1.000), fedprox_mu0.01_k5: +0.0036 (p_holm 1.000), fedprox_mu0.01_k6: -0.0047 (p_holm 1.000), fedprox_mu0.1_k2: +0.0184 (p_holm 0.171), fedprox_mu0.1_k3: +0.0154 (p_holm 0.497), fedprox_mu0.1_k4: +0.0123 (p_holm 0.497), fedprox_mu0.1_k5: +0.0117 (p_holm 0.638), fedprox_mu0.1_k6: +0.0035 (p_holm 1.000)
+% fedprox_vs_fedavg AUC: fedprox_mu0.01_k2: +0.0001 (p_holm 1.000), fedprox_mu0.01_k3: +0.0054 (p_holm 1.000), fedprox_mu0.01_k4: +0.0027 (p_holm 1.000), fedprox_mu0.01_k5: +0.0167 (p_holm 0.378), fedprox_mu0.01_k6: -0.0028 (p_holm 1.000), fedprox_mu0.1_k2: -0.0050 (p_holm 1.000), fedprox_mu0.1_k3: +0.0099 (p_holm 1.000), fedprox_mu0.1_k4: +0.0070 (p_holm 1.000), fedprox_mu0.1_k5: +0.0154 (p_holm 0.385), fedprox_mu0.1_k6: -0.0032 (p_holm 1.000)
+% fedprox_vs_fedavg Specificity: fedprox_mu0.01_k2: +0.0539 (p_holm 1.000), fedprox_mu0.01_k3: +0.0262 (p_holm 1.000), fedprox_mu0.01_k4: +0.0500 (p_holm 1.000), fedprox_mu0.01_k5: -0.1034 (p_holm 1.000), fedprox_mu0.01_k6: -0.0318 (p_holm 1.000), fedprox_mu0.1_k2: +0.1584 (p_holm 0.735), fedprox_mu0.1_k3: +0.0127 (p_holm 1.000), fedprox_mu0.1_k4: +0.1034 (p_holm 1.000), fedprox_mu0.1_k5: -0.0917 (p_holm 0.461), fedprox_mu0.1_k6: -0.0037 (p_holm 1.000)
+% noniid_fedprox_vs_fedavg Accuracy: fedprox_mu0.01_dir0.1_k3: -0.0132 (p_holm 0.125), fedprox_mu0.01_dir0.1_k6: +0.0061 (p_holm 0.757), fedprox_mu0.01_dir0.5_k3: -0.0157 (p_holm 0.150), fedprox_mu0.01_dir0.5_k6: -0.0042 (p_holm 0.757)
+% noniid_fedprox_vs_fedavg AUC: fedprox_mu0.01_dir0.1_k3: -0.0118 (p_holm 1.000), fedprox_mu0.01_dir0.1_k6: -0.0215 (p_holm 1.000), fedprox_mu0.01_dir0.5_k3: +0.0158 (p_holm 0.540), fedprox_mu0.01_dir0.5_k6: +0.0008 (p_holm 1.000)
+% noniid_fedprox_vs_fedavg Specificity: fedprox_mu0.01_dir0.1_k3: -0.0345 (p_holm 1.000), fedprox_mu0.01_dir0.1_k6: +0.0404 (p_holm 1.000), fedprox_mu0.01_dir0.5_k3: -0.0742 (p_holm 0.668), fedprox_mu0.01_dir0.5_k6: +0.0300 (p_holm 1.000)
+% shift_local_vs_global Accuracy: shift_local_k3: +0.0041 (p_holm 0.648), shift_local_k6: +0.0140 (p_holm 0.287)
+% shift_local_vs_global AUC: shift_local_k3: +0.0011 (p_holm 0.917), shift_local_k6: +0.0227 (p_holm 0.145)
+% shift_local_vs_global Specificity: shift_local_k3: +0.0779 (p_holm 0.526), shift_local_k6: +0.0738 (p_holm 0.526)
+
+% ---- Ablation (Table 7), mean over K per seed, +- std over seeds ----
+Full FedAvg \scriptsize(179{,}332 fed.) & IID & $0.667\pm0.013$ & $0.746\pm0.015$ & $0.746\pm0.016$ & $0.418\pm0.074$ \\
+Local--shared \scriptsize(158{,}340 fed.) & IID & $0.642\pm0.010$ & $0.736\pm0.014$ & $0.717\pm0.015$ & $0.334\pm0.052$ \\
+Full FedAvg \scriptsize(179{,}332 fed.) & non-IID & $0.648\pm0.012$ & $0.740\pm0.006$ & $0.727\pm0.019$ & $0.345\pm0.038$ \\
+Local--shared \scriptsize(158{,}340 fed.) & non-IID & $0.632\pm0.013$ & $0.739\pm0.005$ & $0.695\pm0.027$ & $0.262\pm0.055$ \\
+% split-full Accuracy: iid: -0.0249 (t_holm 0.0134, w_holm 0.0212, n 15), non: -0.0153 (t_holm 0.0134, w_holm 0.0212, n 15)
+% split-full F1-Score: iid: -0.0103 (t_holm 0.2271, w_holm 0.6056, n 15), non: -0.0012 (t_holm 0.6440, w_holm 0.8469, n 15)
+% split-full AUC: iid: -0.0298 (t_holm 0.0004, w_holm 0.0001, n 15), non: -0.0320 (t_holm 0.0002, w_holm 0.0003, n 15)
+% split-full Specificity: iid: -0.0837 (t_holm 0.0370, w_holm 0.0479, n 15), non: -0.0823 (t_holm 0.0143, w_holm 0.0205, n 15)
+
+% ---- Footprint (mean over seeds) ----
+% centralized: Training Energy (J)=0.000, Training Time (s)=23.834, Training Memory (MB)=58.550, Inference Energy (J)=0.000, Inference Time (s)=0.109
+% fedavg_k3: Training Energy (J)=0.000, Training Time (s)=114.587, Training Memory (MB)=66.170, Inference Energy (J)=0.000, Inference Time (s)=0.117
+% fedavg_k6: Training Energy (J)=0.000, Training Time (s)=141.016, Training Memory (MB)=69.120, Inference Energy (J)=0.000, Inference Time (s)=0.137

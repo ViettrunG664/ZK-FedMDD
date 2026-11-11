@@ -1,0 +1,43 @@
+{
+  "name": "decentralized_medical",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "circom": ".\\tools\\circom.exe",
+    "build:circuits": "npm run circom -- -l ./circomlib/circuits circuits/hashlogin.circom --r1cs --wasm --sym -o \"circuits/build\"",
+    "postbuild:circuits": "node scripts/witness_to_cjs.cjs",
+    "setup": "hardhat run scripts/setup_zkey.js --network sepolia",
+    "export:verifier": "snarkjs zkey export solidityverifier circuits/build/hashlogin_final.zkey contracts/Verifier.sol",
+    "start:login": "node server.js",
+    "start:register": "node server_register.js",
+    "start:fl": "node server_fl.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.3.0",
+    "dotenv-vault": "^1.26.2",
+    "hardhat": "^2.24.0",
+    "snarkjs": "^0.7.5"
+  },
+  "type": "module",
+  "dependencies": {
+    "@lighthouse-web3/sdk": "^0.4.3",
+    "axios": "^1.13.2",
+    "body-parser": "^2.2.0",
+    "circomlibjs": "^0.1.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "ethers": "^6.14.0",
+    "express": "^5.1.0",
+    "form-data": "^4.0.5",
+    "json-bigint": "^1.0.0",
+    "minimist": "^1.2.8",
+    "node-fetch": "^3.3.2",
+    "python-shell": "^5.0.0"
+  }
+}

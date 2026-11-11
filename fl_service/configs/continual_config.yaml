@@ -1,0 +1,43 @@
+# Continual Learning (D-vlog only)
+# Split D-vlog train into 2 tasks, train sequentially
+experiment:
+  version: "v11"
+  name: "Continual Learning (D-vlog)"
+
+data:
+  dataset: "dvlog"
+  dataset_dir: "data/dvlog-dataset"
+
+continual:
+  ewc_lambda: 5000        # EWC penalty strength
+  replay_buffer_size: 300  # Number of old samples to keep for replay
+  replay_weight: 0.5       # Weight of replay loss
+
+preprocessing:
+  max_seq_len: 64
+  segment_duration: 8.0
+  normalize: true
+  norm_method: "zscore"
+  windowing:
+    enabled: true
+    window_size: 32
+    stride: 16
+    pad_short: true
+
+model:
+  hidden_dim: 64
+  num_layers: 1
+  dropout: 0.4
+  fusion: "attention"
+
+training:
+  task1_epochs: 30
+  task2_epochs: 40
+  batch_size: 16
+  learning_rate: 0.0005
+  weight_decay: 0.001
+  label_smoothing: 0.05
+  patience: 15
+
+seed: 42
+device: "auto"

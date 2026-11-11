@@ -1,0 +1,42 @@
+# Secrets and per-facility material: never commit
+.env
+.env.*
+!.env.example
+salt_number_*.txt
+doctors_db.json
+pending.json
+input.json
+client/input.json
+client/witness.wtns
+client/proof.json
+client/public.json
+collected_data/
+
+# D-vlog may not be redistributed (see README)
+fl_service/data/
+fl_service/cache/
+fl_service/weights/
+fl_service/checkpoints/
+*.pt
+*.npz
+*.pkl
+
+# Large or fetched inputs
+circuits/pot/
+*.ptau
+circomlib/
+
+# Build output and environments
+node_modules/
+/artifacts/
+/cache/
+typechain-types/
+coverage/
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+.claude/
+storage/*-data/
+storage/ipfs-export/
+/tools/

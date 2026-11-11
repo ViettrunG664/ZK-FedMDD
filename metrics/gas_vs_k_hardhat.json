@@ -1,0 +1,940 @@
+{
+  "network": "hardhat",
+  "hardfork": "prague",
+  "date": "2026-11-02T15:45:08.345Z",
+  "relayer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "identityAccess": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "federatedLearning": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "rounds": 2,
+  "register": {
+    "mean": 126764,
+    "min": 123914,
+    "max": 141014,
+    "n": 6
+  },
+  "perK": {
+    "2": {
+      "createTask": 631490,
+      "joinTask": {
+        "mean": 316606,
+        "min": 316606,
+        "max": 316606,
+        "n": 1
+      },
+      "startRound": {
+        "mean": 59792,
+        "min": 42794,
+        "max": 76789,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 511577,
+        "min": 503027,
+        "max": 520139,
+        "n": 4
+      },
+      "submitAggregation": {
+        "mean": 64972,
+        "min": 63699,
+        "max": 66245,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 1147918,
+        "min": 1132181,
+        "max": 1163654,
+        "n": 2
+      },
+      "setup": 948096
+    },
+    "3": {
+      "createTask": 614426,
+      "joinTask": {
+        "mean": 316612,
+        "min": 316606,
+        "max": 316618,
+        "n": 2
+      },
+      "startRound": {
+        "mean": 59792,
+        "min": 42794,
+        "max": 76789,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 508735,
+        "min": 503015,
+        "max": 520139,
+        "n": 6
+      },
+      "submitAggregation": {
+        "mean": 64966,
+        "min": 63699,
+        "max": 66233,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 1650963,
+        "min": 1635232,
+        "max": 1666693,
+        "n": 2
+      },
+      "setup": 1247650
+    },
+    "4": {
+      "createTask": 614378,
+      "joinTask": {
+        "mean": 316606,
+        "min": 316594,
+        "max": 316618,
+        "n": 3
+      },
+      "startRound": {
+        "mean": 59792,
+        "min": 42794,
+        "max": 76789,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 507308,
+        "min": 503015,
+        "max": 520139,
+        "n": 8
+      },
+      "submitAggregation": {
+        "mean": 64972,
+        "min": 63699,
+        "max": 66245,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 2153996,
+        "min": 2138283,
+        "max": 2169708,
+        "n": 2
+      },
+      "setup": 1564196
+    },
+    "5": {
+      "createTask": 614426,
+      "joinTask": {
+        "mean": 316615,
+        "min": 316606,
+        "max": 316618,
+        "n": 4
+      },
+      "startRound": {
+        "mean": 59792,
+        "min": 42794,
+        "max": 76789,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 506449,
+        "min": 503015,
+        "max": 520151,
+        "n": 10
+      },
+      "submitAggregation": {
+        "mean": 64966,
+        "min": 63699,
+        "max": 66233,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 2657005,
+        "min": 2641274,
+        "max": 2672735,
+        "n": 2
+      },
+      "setup": 1880886
+    },
+    "6": {
+      "createTask": 614426,
+      "joinTask": {
+        "mean": 316606,
+        "min": 316594,
+        "max": 316618,
+        "n": 5
+      },
+      "startRound": {
+        "mean": 59792,
+        "min": 42794,
+        "max": 76789,
+        "n": 2
+      },
+      "submitUpdate": {
+        "mean": 505888,
+        "min": 503015,
+        "max": 520151,
+        "n": 12
+      },
+      "submitAggregation": {
+        "mean": 64972,
+        "min": 63699,
+        "max": 66245,
+        "n": 2
+      },
+      "perRound": {
+        "mean": 3160092,
+        "min": 3144337,
+        "max": 3175846,
+        "n": 2
+      },
+      "setup": 2197456
+    }
+  },
+  "submitUpdateCalldataBytes": 548,
+  "proofCalldataBytes": 256,
+  "spentEth": "0.031294512526272277",
+  "txs": [
+    {
+      "fn": "register",
+      "i": 0,
+      "gas": 141014,
+      "calldataBytes": 132,
+      "tx": "0xe65b54d2122466df83a7edc0d2c79b3d7848667eb17e8957cc2cda8d2566cbce",
+      "block": 4
+    },
+    {
+      "fn": "register",
+      "i": 1,
+      "gas": 123914,
+      "calldataBytes": 132,
+      "tx": "0x1dd801c4adf6aee505d88488f8f3c7d87524e20c3e1aa3ae483d9a07df2e0561",
+      "block": 5
+    },
+    {
+      "fn": "register",
+      "i": 2,
+      "gas": 123914,
+      "calldataBytes": 132,
+      "tx": "0xf56a4b9780725f86e067c776eaff70dc7fdc0575ee820f1714861f871f1825e0",
+      "block": 6
+    },
+    {
+      "fn": "register",
+      "i": 3,
+      "gas": 123914,
+      "calldataBytes": 132,
+      "tx": "0xe49b91882f7116b20cbbfdb4d2efbce19621c41e733c9848c964d19becd4e5eb",
+      "block": 7
+    },
+    {
+      "fn": "register",
+      "i": 4,
+      "gas": 123914,
+      "calldataBytes": 132,
+      "tx": "0xfe48a6182dd081ec1752de0fa959b903e1e6fb44add3f06ae03f69ec571b62fc",
+      "block": 8
+    },
+    {
+      "fn": "register",
+      "i": 5,
+      "gas": 123914,
+      "calldataBytes": 132,
+      "tx": "0x3f04b156f231fb1930b52bfa835797ece44a3415edfc64ac280d5fc81d18d1d9",
+      "block": 9
+    },
+    {
+      "fn": "createTask",
+      "K": 2,
+      "gas": 631490,
+      "calldataBytes": 676,
+      "tx": "0x65b29a393fb15ef0c1ef03b0fbc70875e991d2d5fae4c651bc9d0c7d6c244a59",
+      "block": 10
+    },
+    {
+      "fn": "joinTask",
+      "K": 2,
+      "gas": 316606,
+      "calldataBytes": 324,
+      "tx": "0x90a0d7042504d2be50f4ebdb99a9aafa4762e885a5d24c295c6be5f7009b0c74",
+      "block": 11
+    },
+    {
+      "fn": "startRound",
+      "K": 2,
+      "round": 1,
+      "gas": 76789,
+      "calldataBytes": 36,
+      "tx": "0x31924f77e33382ba26edfc329113218fa480a9cc51a2ea433bbd729eab8991f8",
+      "block": 12
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 1,
+      "gas": 520139,
+      "calldataBytes": 548,
+      "tx": "0xea90fe8ace4ec62f379546ef3ce82b395ffdde4ddd9392ca2924c5116c5e9957",
+      "block": 13
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 1,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x53c88d0fa7bb5260fe5673934ddaab70e271b85c0e4da8aac62b074c83dc5ee6",
+      "block": 14
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 2,
+      "round": 1,
+      "gas": 63699,
+      "calldataBytes": 196,
+      "tx": "0x9125afb84d6fff0683f5a293ce4b19a191923f5e25939fbe3765ce73cb1fcabe",
+      "block": 15
+    },
+    {
+      "fn": "startRound",
+      "K": 2,
+      "round": 2,
+      "gas": 42794,
+      "calldataBytes": 36,
+      "tx": "0x48b7d34c875639ff247ad03fba9b0b06c37b721065f92c6c93804c230c79eb8f",
+      "block": 16
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 2,
+      "gas": 520115,
+      "calldataBytes": 548,
+      "tx": "0x49bc0285ca7eea809aee2f97be317c004b3ba88ab422dbfa11a90ae43dabaca0",
+      "block": 17
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 2,
+      "round": 2,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x99f2f468a2a08e5246fa2ba61838ef5f9b3bbeb1d6d328b90d2e588b7c5272d8",
+      "block": 18
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 2,
+      "round": 2,
+      "gas": 66245,
+      "calldataBytes": 196,
+      "tx": "0xeb0dffdc9ca06ae80dda0dfb3d92a202af086af860c384165f0e6c94bc352af7",
+      "block": 19
+    },
+    {
+      "fn": "createTask",
+      "K": 3,
+      "gas": 614426,
+      "calldataBytes": 676,
+      "tx": "0x22378c60f7c87f6c54d86688931c372b4b1c6edda2f0361e1c7398fe60257a55",
+      "block": 20
+    },
+    {
+      "fn": "joinTask",
+      "K": 3,
+      "gas": 316606,
+      "calldataBytes": 324,
+      "tx": "0x452a300f457293e44264170cae383a885afd1c5bd8195918f3a5447a098f3e55",
+      "block": 21
+    },
+    {
+      "fn": "joinTask",
+      "K": 3,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0x0f465a178fc3ff3428fc6fd31fb83e62c45863357cf7a40f8761bf5fe4bd96bd",
+      "block": 22
+    },
+    {
+      "fn": "startRound",
+      "K": 3,
+      "round": 1,
+      "gas": 76789,
+      "calldataBytes": 36,
+      "tx": "0x324d58a1b9c6411c58c9d1fab3932b3483bf45980aa32b3e9352e0f5327a84bc",
+      "block": 23
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 520139,
+      "calldataBytes": 548,
+      "tx": "0xa0a37d1960008f8ac84b26674e85d34b854906905be8c886e586766798801e01",
+      "block": 24
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x12341d3f4d43c2e699ce88cb912fa005d84097fb9f6497b4a6e31e5d50532662",
+      "block": 25
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 1,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x340fea2c219e98242d22db842baed650b88f02f8d3c8416ef18f12b148eb60d3",
+      "block": 26
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 3,
+      "round": 1,
+      "gas": 63699,
+      "calldataBytes": 196,
+      "tx": "0xbd553e21d10a459a344c8a8b2b9c6ea6ad459a8fe6f97f805a3bedc40fa88dc3",
+      "block": 27
+    },
+    {
+      "fn": "startRound",
+      "K": 3,
+      "round": 2,
+      "gas": 42794,
+      "calldataBytes": 36,
+      "tx": "0x3c946b2ca5ffcfd4a1f81cf0ba49a70483fa9a5293ad3b0ec8adb56919aa5bd9",
+      "block": 28
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 520139,
+      "calldataBytes": 548,
+      "tx": "0x50008cb10b3f09e59bf342fb9b8365593a83cd6458bdb62cdfa8f855fe92f0ad",
+      "block": 29
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0x8f6b3cd88d7fc08b132a78887ebb3c0325c17b692e6392b1a0f34e49ab818073",
+      "block": 30
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 3,
+      "round": 2,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0x76527bf4a33e4435c1a7734ebdd06dbc223817be340f1eaef7a19aab996d6a65",
+      "block": 31
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 3,
+      "round": 2,
+      "gas": 66233,
+      "calldataBytes": 196,
+      "tx": "0x49a47e7a57b9b50da0a1b010365af98495b9190128928f44650c11d14d1519fb",
+      "block": 32
+    },
+    {
+      "fn": "createTask",
+      "K": 4,
+      "gas": 614378,
+      "calldataBytes": 676,
+      "tx": "0x1533ceb3860a5d1346446d03fe7f1f87e60993fca52a35c24cf43bcdeccbc189",
+      "block": 33
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0xf680ead26788ac9466aa5cb2defbd1f099bd6d068e65a4baeada9bf4b302d813",
+      "block": 34
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 316606,
+      "calldataBytes": 324,
+      "tx": "0x4efa54e8a3111db1107b59621b7ffe56c9bb32f82d307edcb4a905567976cafd",
+      "block": 35
+    },
+    {
+      "fn": "joinTask",
+      "K": 4,
+      "gas": 316594,
+      "calldataBytes": 324,
+      "tx": "0xe0ac7b626cf182e0fd09eee88997d603282232a50ea98a6eb0350e9184bccef0",
+      "block": 36
+    },
+    {
+      "fn": "startRound",
+      "K": 4,
+      "round": 1,
+      "gas": 76789,
+      "calldataBytes": 36,
+      "tx": "0x62d2089b730603b252bce6f989762ce8c55a0bee634a9abe9f0bfe93ee43069e",
+      "block": 37
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 520115,
+      "calldataBytes": 548,
+      "tx": "0xf7eb4357f65224fbe3d0fee9158df8dff882731ee12de0ec336e4a75a10b4702",
+      "block": 38
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0x89658e2f636ac4015e3c6e0f98c022ea957fd1c2f236fee4657aec278a5ac9d7",
+      "block": 39
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0xd5811d9d43157d8a1c3f25efbfd1a045368b3cc7e57bc408d3b0b6897c71ee41",
+      "block": 40
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0xfe1913c8a021ec4c855c588c66a119839e77a40240bd18ba8d1643ab2f5b4eac",
+      "block": 41
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 4,
+      "round": 1,
+      "gas": 63699,
+      "calldataBytes": 196,
+      "tx": "0x549143e8e1a64cad2c6fecc87fe4b869a0c5f62b4a978654539b1e02aa93c523",
+      "block": 42
+    },
+    {
+      "fn": "startRound",
+      "K": 4,
+      "round": 2,
+      "gas": 42794,
+      "calldataBytes": 36,
+      "tx": "0xc12ab585cdd7e4d43775a4036910c6fffa35a0086d42d4c23a4bbd32901eb2f7",
+      "block": 43
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 520139,
+      "calldataBytes": 548,
+      "tx": "0x750d9df79e8e9a80d29204d397e4db0620588e5751082f66b2cf95dd7c59408a",
+      "block": 44
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x802be5fdce84eb72b9ebc6888d02769206c3dbcc2d76a84c9d28b45f608ee705",
+      "block": 45
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0xb7ca51862f144b0811c57c2c9e7f36527ced82c65bd2dabf8bda4b783ca1a51a",
+      "block": 46
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 4,
+      "round": 2,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x4c2262a7f685d297f6a0b01a1f90ca0f7e0d9c230030251aefd00588a3642929",
+      "block": 47
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 4,
+      "round": 2,
+      "gas": 66245,
+      "calldataBytes": 196,
+      "tx": "0x629af8d6c1b8442568afb82f21fccdac0b25637d66aea7968316ac27c794aaa9",
+      "block": 48
+    },
+    {
+      "fn": "createTask",
+      "K": 5,
+      "gas": 614426,
+      "calldataBytes": 676,
+      "tx": "0xe2d47db7b2d5aaef43e3a4f1b13faaeaa74b644a3160a867427cde660dbc370d",
+      "block": 49
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0x36796d5d7c6ae0a39af08149f659d599299f6f1e724a7c8c3ac810214b60f257",
+      "block": 50
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0x854c1b5d3f96684dd66e7626295d11a5fb07c337a3471dc3a8133253ba84333d",
+      "block": 51
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 316606,
+      "calldataBytes": 324,
+      "tx": "0x2df09bb1801c5fd9e0da15c2dbce848526b4752a3e932a48d8735492e1a982b1",
+      "block": 52
+    },
+    {
+      "fn": "joinTask",
+      "K": 5,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0xda4161e7cc05b3b6cf2b02aed615d0b1e1849480e572884d62215f7d375844b2",
+      "block": 53
+    },
+    {
+      "fn": "startRound",
+      "K": 5,
+      "round": 1,
+      "gas": 76789,
+      "calldataBytes": 36,
+      "tx": "0x0a91388fe0147bfdba8727e7a08c94bafdd61795c248f170321546413cfdfd87",
+      "block": 54
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 520115,
+      "calldataBytes": 548,
+      "tx": "0x8feeb7efa9a24d768f90ce6094de1fe89230c14e5096fcbbe0165e0734ba1c16",
+      "block": 55
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x5414aafdadd2f5909071df123bc71e3f0d5d4fc148c7f52e401619652c5c2c50",
+      "block": 56
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0x990f03ed76306fb3f18fda0e7a505512382465f718c1e190e857f9af460b35b3",
+      "block": 57
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0xbdb5e4fd995e44215c446286f757cb15972ae95ef6d92273ae4e1ae82d075a02",
+      "block": 58
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x3eee85a4c4f11dd82fe86acd11dcfa0c5b8e54e5e65207e8a0d42d588c62751e",
+      "block": 59
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 5,
+      "round": 1,
+      "gas": 63699,
+      "calldataBytes": 196,
+      "tx": "0x2bc72d021f04a3535370e751dc4db4d1249ee2a0bbfd659a31abb9991bf9514c",
+      "block": 60
+    },
+    {
+      "fn": "startRound",
+      "K": 5,
+      "round": 2,
+      "gas": 42794,
+      "calldataBytes": 36,
+      "tx": "0x395b1f65117e8eedd504d650312e01c4f643a3c1909a2853defae4675325dbd5",
+      "block": 61
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 520151,
+      "calldataBytes": 548,
+      "tx": "0xc83982601219a3648e02fbe227687453819fea7b599441db7b1ba78cce94ee6c",
+      "block": 62
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0xba6543dec1dc769bb9b1bc4caf3a1c7da48f82c097cbeda382c3091b3d41dd54",
+      "block": 63
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0xe02803533edf1cba0bfee7817ed5a206ad8e6c4b7b36127d64d3ce75e3d916c6",
+      "block": 64
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x4fdfadde888c1060213d5e672996829b7d699970fce11e83b84e9abfc7ec8b84",
+      "block": 65
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 5,
+      "round": 2,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x54d4d4a2a37920f90b45cd157e95fb2939a4cfaad1c89b667e34948ee5a84285",
+      "block": 66
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 5,
+      "round": 2,
+      "gas": 66233,
+      "calldataBytes": 196,
+      "tx": "0x99ffdcfde68a92319163b4669d9fd5471e1c0f8084da5e19c66f5f4bf73e2ba5",
+      "block": 67
+    },
+    {
+      "fn": "createTask",
+      "K": 6,
+      "gas": 614426,
+      "calldataBytes": 676,
+      "tx": "0xa8b61591a94e9ff820fbc6bc69607ed9d0cfdc68cdc223151e3c5a20b1343b8f",
+      "block": 68
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 316594,
+      "calldataBytes": 324,
+      "tx": "0xe43d4dd36a97384d02fd5ade463ddd88bc1db0ada49d4d6705bdd4617962971c",
+      "block": 69
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0xb0779c9f7cc76d4efac06bc2e37acf722c63f1e1d21ca3b21c41c107089fcd44",
+      "block": 70
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 316606,
+      "calldataBytes": 324,
+      "tx": "0xad037df1e91f36b0eefe6dd559a7baec2da12b973097dd1782a71bad09fe6c4a",
+      "block": 71
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 316618,
+      "calldataBytes": 324,
+      "tx": "0xae867b04df761be1aa66a54875d9f52d8b8e47136cf3ae62c781ea6daadadf8c",
+      "block": 72
+    },
+    {
+      "fn": "joinTask",
+      "K": 6,
+      "gas": 316594,
+      "calldataBytes": 324,
+      "tx": "0xc1b6d7b21379c70090233657f0aab12c1ece6d96bf02b429a9afe92ce4364d24",
+      "block": 73
+    },
+    {
+      "fn": "startRound",
+      "K": 6,
+      "round": 1,
+      "gas": 76789,
+      "calldataBytes": 36,
+      "tx": "0xd228c19283ef96bd47eff7bdefe292df3147f6f7f37ae19508830687bf2b3ceb",
+      "block": 74
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 520151,
+      "calldataBytes": 548,
+      "tx": "0xbd0244bb78054b7d8e1c33d0550bc5e31df8236c46405dcc04ba80f255e7f527",
+      "block": 75
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0xc9383dff5473d1e3e13fe9fbf324e6be85f67207abe79a49d6a7de3e376959e0",
+      "block": 76
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x6a312e289afb87e5e1072ef04ea6c2b430dfd07886e3cdedc3a9f14916ed0aa5",
+      "block": 77
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0xfc67cbea757fde2d4212f2c24f497678cd8f8c4fd4799b2f4bf592af24066118",
+      "block": 78
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0xe367e0936997123df0ebbf6bc61c795683725cd2b702cae16d30181f5432776a",
+      "block": 79
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 1,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0x8f63361fd7d86a86ce196ce90b45bd10d989021716343348b5f20999466286db",
+      "block": 80
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 6,
+      "round": 1,
+      "gas": 63699,
+      "calldataBytes": 196,
+      "tx": "0xc5514a93682f5d97b60a5f748d844e948ac762cdab72d1c59bda9351cfa52ba0",
+      "block": 81
+    },
+    {
+      "fn": "startRound",
+      "K": 6,
+      "round": 2,
+      "gas": 42794,
+      "calldataBytes": 36,
+      "tx": "0xc74d219cff80d0abe479aceff5b0791a640b7bdfd9b957434a88cafbdcca6ca3",
+      "block": 82
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 520115,
+      "calldataBytes": 548,
+      "tx": "0x7fb8b25e1c57f89c1e31f5e838e940a5e0058666b7c3a092b00bca5a45952545",
+      "block": 83
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 503039,
+      "calldataBytes": 548,
+      "tx": "0x0becb85a25d13594167954c2b2fb8c80f1b0b58e3f40ccfff23ba446f00c8814",
+      "block": 84
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0x8202178a48712cd9bcaa726d78641f7c9aa17f0c2a4826d6fcacb9ae413c21c2",
+      "block": 85
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 503051,
+      "calldataBytes": 548,
+      "tx": "0x3a434525e595818083ce1dcd9d93a9a21724b8197ad491901f8a920618410c59",
+      "block": 86
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 503015,
+      "calldataBytes": 548,
+      "tx": "0x70bb137d1f6f195bdb6259e55aba359cf67c84639656d311060b8848f78290c3",
+      "block": 87
+    },
+    {
+      "fn": "submitUpdate",
+      "K": 6,
+      "round": 2,
+      "gas": 503027,
+      "calldataBytes": 548,
+      "tx": "0x978f7e9916f2883081594167290f0f393e8955e92d4c70b5456fb08a1545ed22",
+      "block": 88
+    },
+    {
+      "fn": "submitAggregation",
+      "K": 6,
+      "round": 2,
+      "gas": 66245,
+      "calldataBytes": 196,
+      "tx": "0xf10e5ad1af78cfbd93905d0064586385ace4455c6d7e0624eb1a909a10cd093d",
+      "block": 89
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "date": "2026-11-02T15:25:14.106Z",
+  "deployer": "0xACeC27c7553F55603A3D45AA953E27c1c0911BA2",
+  "contracts": {
+    "Groth16Verifier": {
+      "address": "0x3E9F299f4063560FA2e86C34836A9a30AADd1e05",
+      "tx": "0x3c7a43ffc1cdb1e7df9f9e9dbbeaf90dfab560f1b63053fb546d599480d24eb0",
+      "block": 12049024,
+      "gas": 3012629
+    },
+    "IdentityAccess": {
+      "address": "0x071ff5512Db7a05a5cded1d8e979049418d64A43",
+      "tx": "0x3dc6880b22598ef0070e05f936d3cedcf4c2a908baf28af1294214040f612dd7",
+      "block": 12049025,
+      "gas": 9222407
+    },
+    "FederatedLearning": {
+      "address": "0x7AD9baB5c0F4c9d47f812710f265f60cF2E9AE11",
+      "tx": "0x564fd2c71c443fd1f3e1a2ef2380f598c97d8c1613265019d6af8d523dd1de76",
+      "block": 12049026,
+      "gas": 24193909
+    }
+  }
+}

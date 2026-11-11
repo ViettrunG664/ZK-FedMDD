@@ -1,0 +1,60 @@
+{
+  "num_runs": 5,
+  "num_failed": 0,
+  "latency": {
+    "mean": 2922.2527800000535,
+    "median": 2302.5063000004593,
+    "std": 1346.6865311716679,
+    "min": 2274.3850000006205,
+    "max": 5328.929400000561,
+    "p50": 2302.5063000004593,
+    "p95": 5328.929400000561,
+    "p99": 5328.929400000561
+  },
+  "memory_mb": {
+    "mean": 0.02890625,
+    "max": 0.1328125
+  },
+  "proof_size": {
+    "proof_bytes": 805,
+    "public_bytes": 84,
+    "total_bytes": 889
+  },
+  "raw_data": [
+    {
+      "latency_ms": 5328.929400000561,
+      "mem_delta_mb": 0.1328125,
+      "proof_size_bytes": 805,
+      "public_size_bytes": 84,
+      "total_size_bytes": 889
+    },
+    {
+      "latency_ms": 2274.3850000006205,
+      "mem_delta_mb": 0.00390625,
+      "proof_size_bytes": 804,
+      "public_size_bytes": 84,
+      "total_size_bytes": 888
+    },
+    {
+      "latency_ms": 2422.062099998584,
+      "mem_delta_mb": 0.00390625,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 84,
+      "total_size_bytes": 890
+    },
+    {
+      "latency_ms": 2283.3811000000424,
+      "mem_delta_mb": 0.00390625,
+      "proof_size_bytes": 806,
+      "public_size_bytes": 83,
+      "total_size_bytes": 889
+    },
+    {
+      "latency_ms": 2302.5063000004593,
+      "mem_delta_mb": 0.0,
+      "proof_size_bytes": 807,
+      "public_size_bytes": 83,
+      "total_size_bytes": 890
+    }
+  ]
+}

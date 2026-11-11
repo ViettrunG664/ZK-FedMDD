@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-11-27T07:34:14.337Z",
+  "deployments": [
+    {
+      "contract": "Verifier",
+      "address": "0xF15229fb9eD26AfCb0cd5b0886efF92ea9Be648e",
+      "gas": 385227,
+      "cost_eth": 0.000012994705603611
+    },
+    {
+      "contract": "IdentityAccess",
+      "address": "0xE3412828000efb61A114a1433bD0368EdC13A9cA",
+      "gas": 1210202,
+      "cost_eth": 0.001225780420850958
+    }
+  ],
+  "summary": {
+    "total_gas": 1595429,
+    "total_cost_eth": 0.001238775126454569,
+    "total_cost_usd": 2.477550252909138
+  }
+}

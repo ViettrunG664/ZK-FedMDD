@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-02T15:10:05.058Z",
+  "circuit": "circuits/hashlogin.circom",
+  "nPublic": 4,
+  "phase1": {
+    "file": "circuits/pot/powersOfTau28_hez_final_18.ptau",
+    "source": "Hermez powersOfTau28_hez_final_18 (public ceremony)"
+  },
+  "phase2": {
+    "contributions": [
+      {
+        "name": "ZK-FedMDD contribution 1",
+        "hash": "fa04978d177684ab12580d4a7f1c049773469a4d963026d586ed79b9325ce796cc99e5b610f3681f7c83afe14c54c977bc579fe4f08a8461279399bfbe73ac21"
+      }
+    ],
+    "beacon": {
+      "source": "Ethereum Sepolia block hash",
+      "contributionFinishedAtBlock": 12048949,
+      "block": 12048950,
+      "hash": "0xed69a63f6f4faec4add5759ab90b025e19fc875f9ba47b3f49738ff23aa98923",
+      "iterationsExp": 10
+    }
+  },
+  "verified": true,
+  "sha256": {
+    "r1cs": "1d7813db13a02fc29c0b0cdd18a2029a45c032d61e28f8a9d9b7a3c684ba0514",
+    "finalZkey": "046e2336bc02e78abd66d7210b521c192ed91fde9ffaf07ea7c25ef6d1529794",
+    "verifier": "dd7ed0daeb4cc677f1e0c4d02956074cc58d6c5425511990504e0b31e155f8e3"
+  }
+}

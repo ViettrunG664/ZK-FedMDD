@@ -1,0 +1,42 @@
+{
+  "hardware": {
+    "CPU": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "CPU Cores": 14,
+    "CPU Threads": 20,
+    "RAM (GB)": 23.7,
+    "OS": "Windows 11",
+    "Python": "3.12.10",
+    "PyTorch": "2.13.0+cu130",
+    "GPU": "NVIDIA GeForce RTX 3050 Ti Laptop GPU",
+    "VRAM (GB)": 4.0,
+    "CUDA": "13.0"
+  },
+  "seeds": [
+    42,
+    1,
+    7,
+    123,
+    2024,
+    2,
+    3,
+    5,
+    8,
+    13
+  ],
+  "k_values": [
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "prox_mus": [
+    0.01,
+    0.1
+  ],
+  "alphas": [
+    0.5,
+    0.1
+  ],
+  "shift_sigma": 0.5
+}

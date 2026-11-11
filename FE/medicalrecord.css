@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.record-container {
+  background-color: #ffffff;
+  padding: 38px 50px 38px 50px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.09);
+  width: 700px;
+  min-height: 600px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.record-info {
+  background: #f6fefe;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 8px;
+  padding: 24px 26px;
+  margin-bottom: 8px;
+}
+
+.record-info h2 {
+  color: #00796b;
+  font-size: 1.4em;
+  margin-bottom: 18px;
+  font-weight: bold;
+}
+
+.record-info div {
+  margin-bottom: 12px;
+  font-size: 1.12em;
+  color: #333;
+}
+
+#uploadRecordBtn {
+  background: #00796b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 20px;
+  margin-top: 7px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+#uploadRecordBtn:hover {
+  background: #004d40;
+}
+
+.records-section h3 {
+  font-size: 1.2em;
+  color: #00796b;
+  margin-bottom: 18px;
+}
+
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 200px;
+}
+
+.record-list li:hover {
+  box-shadow: 0 4px 16px rgba(0,127,123,0.11);
+  border-color: #00796b;
+}
+
+.record-list li {
+  background: #f6fefe;
+  border: 1px solid #b2dfdb;
+  border-radius: 7px;
+  margin-bottom: 15px;
+  padding: 13px 22px;
+  font-size: 1.08em;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  transition: box-shadow 0.16s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record-list li b {
+  color: #00796b;
+  font-size: 1.11em;
+  margin-right: 10px;
+}
+
+.record-list li a {
+  color: #00796b;
+  font-weight: bold;
+  margin-left: 10px;
+  text-decoration: underline;
+}
+
+.record-list li a:hover {
+  color: #004d40;
+}
+
+.record-list .no-record {
+  text-align: center;
+  color: #c00;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 30px 0 20px 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+}

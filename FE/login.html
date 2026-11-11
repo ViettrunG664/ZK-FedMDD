@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=600, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="loading.css" />
+</head>
+
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="username">Practitioner ID (format: BV.&lt;HOSPITAL&gt;:&lt;8-char-DOCTOR-ID&gt;)</label>
+      <input type="text" pattern="BV\.[A-Z0-9]+:[A-Z0-9]{8}" maxlength="32" id="username" name="username"
+        placeholder="e.g. BV.HOSPA:A3X7K2PQ" required style="text-transform:uppercase" />
+
+      <label for="password">Salt number</label>
+      <div class="password-wrapper">
+        <input type="password" id="password" name="password" required />
+        <span class="toggle-password" onclick="togglePassword()">
+          <!-- Eye open SVG -->
+          <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" style="display:none;" width="24" height="24" fill="none"
+            stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <!-- Eye closed SVG (ẩn ban đầu) -->
+          <svg id="eyeClosed" style="display:inline-block;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            fill="none" stroke="#00796b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Đường mắt nhắm -->
+            <path d="M4 15 Q12 19 20 15" />
+            <!-- Lông mi -->
+            <path d="M4.5 13 Q4 14.5 3.5 16" /> <!-- Lông mi ngoài bên trái -->
+            <path d="M7 14 Q6 16 5 17" /> <!-- Lông mi trong bên trái -->
+            <path d="M12 15 Q12 17 12 19" /> <!-- Lông mi giữa -->
+            <path d="M17 14 Q18 16 19 17" /> <!-- Lông mi trong bên phải -->
+            <path d="M19.5 13 Q20 14.5 20.5 16" /> <!-- Lông mi ngoài bên phải -->
+          </svg>
+        </span>
+      </div>
+
+      <label for="role">Role</label>
+      <div class="role-select">
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Select role</option>
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
+      </div>
+
+      <button type="submit">Log in</button>
+      <p class="register-link">No account yet? <a href="http://localhost:3001/register.html">Register</a></p>
+    </form>
+  </div>
+  <script src="login.js"></script>
+</body>
+
+</html>
