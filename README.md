@@ -26,7 +26,7 @@ evaluated for clinical use.
 | `benchmarks/` | Gas versus number of facilities, gas-schedule check, prover latency and memory, security drills |
 | `metrics/` | Measured results, including the transaction hash of every Sepolia figure in the paper |
 | `fl_service/` | Data loading, model, centralized / FedAvg / FedProx training, experiment drivers, statistics and table generation |
-| `fl_service/results/` | Per-run logs from which every result table is generated (see [Released logs](#released-logs)) |
+| `fl_service/results/` | Per-run logs from which every federated-learning result table is regenerated (see [Released logs](#released-logs)) |
 | `client/`, `fast_prove/`, `server*.js`, `FE/`, `utils/` | End-to-end prototype: facility prover, proof service, relayer and registration servers, web front end |
 | `storage/docker-compose.yml` | Optional IPFS / Filecoin nodes for off-chain weights (not exercised in the paper's experiments) |
 
