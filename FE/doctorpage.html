@@ -10,7 +10,6 @@
 
 <body>
     <div class="doctor-container">
-        <!-- Thông tin bác sĩ -->
         <div class="doctor-info">
             <h2>Doctor Information</h2>
             <div class="info-row">
@@ -21,7 +20,6 @@
                 <span class="label">Department:</span>
                 <span class="value" id="department-name">Cardiology</span>
                 <button class="toggle-hash-btn" onclick="toggleDepartmentHash()" title="Switch department display">
-                    <!-- SVG icon chuyển đổi -->
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#00796b" stroke-width="2.2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="10" stroke="#00796b" />
@@ -33,13 +31,11 @@
             </div>
         </div>
 
-        <!-- Danh sách bệnh nhân -->
         <div class="patients-section">
             <h3>List of patients by department</h3>
             <input type="text" id="search-patient" class="search-input" placeholder="Search by #number or hash ID...">
             <div class="patient-box">
                 <ul class="patients-list" id="patients-list">
-                    <!-- Danh sách render bằng JS -->
                 </ul>
             </div>
         </div>

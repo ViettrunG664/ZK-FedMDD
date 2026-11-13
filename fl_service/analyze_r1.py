@@ -1,20 +1,3 @@
-"""
-Statistics for the multi-seed runs of benchmark_seeds.py (results/r1_runs.jsonl).
-
-Per configuration: mean +/- sample std and a t-based 95% CI over seeds for
-accuracy, F1, precision, sensitivity, specificity and ROC-AUC; the summed
-confusion matrix and the review cost of the operating point; the per-shard
-train/validation accuracy gap at the selected round.
-Tests (paired over seeds, Holm-corrected within each family):
-  - FedAvg K=2..6 vs centralized (paired t and Wilcoxon signed-rank)
-  - trend of FedAvg accuracy / F1 / AUC with K (linear regression over all runs)
-  - FedProx vs FedAvg at the same K, non-IID FedProx vs FedAvg, shift local vs global
-Also writes the mean validation-F1 learning curve per configuration.
-
-Run from the fl_service/ directory:
-    python analyze_r1.py [--in results/r1_runs.jsonl]
-Output: results/r1_stats.json, results/r1_curves.csv
-"""
 import os
 import csv
 import json
@@ -45,7 +28,6 @@ def ci95(xs):
 
 
 def holm(pvals):
-    """Holm step-down adjusted p-values, same order as the input."""
     order = np.argsort(pvals)
     adj, running = [0.0] * len(pvals), 0.0
     for rank, i in enumerate(order):
@@ -62,7 +44,6 @@ def summarize(rows):
     tn, fp, fn, tp = np.sum([s["cm"] for r in rows for s in r["PerSite"]], axis=0).tolist()
     n = tn + fp + fn + tp
     out["cm_sum"] = [tn, fp, fn, tp]
-    # Review cost: how many flagged participants a clinician must review per true case found
     out["review"] = {
         "false_pos_per_true_pos": fp / tp if tp else None,
         "flagged_per_100_screened": 100 * (tp + fp) / n,
@@ -80,7 +61,6 @@ def summarize(rows):
 
 
 def paired(a_rows, b_rows, field):
-    """Paired comparison a - b over the seeds present in both."""
     a = {r["seed"]: r[field] for r in a_rows}
     b = {r["seed"]: r[field] for r in b_rows}
     common = sorted(set(a) & set(b))
@@ -94,7 +74,6 @@ def paired(a_rows, b_rows, field):
 
 
 def family(pairs, field):
-    """Paired tests for a list of (label, a_rows, b_rows), Holm-corrected together."""
     res = {label: paired(a, b, field) for label, a, b in pairs}
     valid = [k for k, v in res.items() if v]
     for key in ("t_p", "wilcoxon_p"):
@@ -105,8 +84,6 @@ def family(pairs, field):
 
 
 def ablation(rows):
-    """Table 7: per configuration, the K-averaged metric of every seed -> mean/std over seeds;
-    split vs full paired over (seed, K) within each partition, Holm-corrected across partitions."""
     by_cfg = defaultdict(list)
     for r in rows:
         by_cfg[r["config"]].append(r)
@@ -125,7 +102,6 @@ def ablation(rows):
             full = {(r["seed"], r["K"]): r for r in by_cfg.get(f"Fed-full-{part}", [])}
             split = {(r["seed"], r["K"]): r for r in by_cfg.get(f"Fed-split-{part}", [])}
             common = sorted(set(full) & set(split))
-            # re-key by run index so paired() can match them
             pairs.append((part, [{"seed": i, field: split[k][field]} for i, k in enumerate(common)],
                           [{"seed": i, field: full[k][field]} for i, k in enumerate(common)]))
         out["split_vs_full"][field] = family(pairs, field)
@@ -188,7 +164,6 @@ def main():
     with open(os.path.join("results", "r1_stats.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
 
-    # Learning curves: mean validation F1 per round (runs that stopped early carry their last value)
     with open(os.path.join("results", "r1_curves.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["config", "round", "val_f1_mean", "val_f1_std", "train_loss_mean", "n_runs"])

@@ -1,11 +1,3 @@
-"""
-Continual Learning for Depression Detection.
-
-Implements:
-  - EWC (Elastic Weight Consolidation): penalizes changes to important weights
-  - Replay Buffer: stores a subset of old data for rehearsal
-"""
-
 import copy
 import torch
 import torch.nn as nn
@@ -15,12 +7,6 @@ from typing import Dict, List, Optional
 
 
 class EWC:
-    """Elastic Weight Consolidation.
-
-    After training on task A, computes Fisher Information Matrix to identify
-    important weights. When training on task B, adds penalty to prevent
-    changing those important weights.
-    """
 
     def __init__(self, model: nn.Module, dataloader: DataLoader, device: torch.device,
                  exclude_prefixes=("audio_proj", "visual_proj")):
@@ -34,13 +20,12 @@ class EWC:
         self.fisher = self._compute_fisher(dataloader)
 
     def _compute_fisher(self, dataloader: DataLoader) -> Dict[str, torch.Tensor]:
-        """Compute Fisher Information Matrix from task A data."""
         fisher = {
             n: torch.zeros_like(p) for n, p in self.model.named_parameters()
             if p.requires_grad and not any(n.startswith(ex) for ex in self.exclude_prefixes)
         }
 
-        self.model.train()  # Must be in train mode for cuDNN RNN backward
+        self.model.train()
         num_samples = 0
 
         for batch in dataloader:
@@ -60,14 +45,12 @@ class EWC:
 
             num_samples += audio.size(0)
 
-        # Average
         for n in fisher:
             fisher[n] /= num_samples
 
         return fisher
 
     def penalty(self, model: nn.Module) -> torch.Tensor:
-        """Compute EWC penalty: sum of F_i * (theta_i - theta*_i)^2."""
         loss = torch.tensor(0.0, device=self.device)
         for n, p in model.named_parameters():
             if p.requires_grad and n in self.fisher:
@@ -76,14 +59,8 @@ class EWC:
 
 
 class ReplayBuffer:
-    """Stores a random subset of old data for rehearsal during new task training."""
 
     def __init__(self, dataset, buffer_size: int = 200, seed: int = 42):
-        """
-        Args:
-            dataset: PyTorch Dataset from old task
-            buffer_size: Number of samples to keep
-        """
         np.random.seed(seed)
         total = len(dataset)
         n_keep = min(buffer_size, total)
@@ -110,14 +87,8 @@ def train_with_ewc(
     patience: int = 15,
     label_smoothing: float = 0.05,
 ) -> Dict[str, list]:
-    """Training loop with optional EWC penalty and replay buffer.
-
-    Returns:
-        history dict with train_loss, val_loss, val_f1
-    """
     from src.evaluate import evaluate
 
-    # Class weight
     all_labels = []
     for batch in train_loader:
         all_labels.append(batch["label"])
@@ -145,7 +116,6 @@ def train_with_ewc(
             text = batch["text"].to(device) if "text" in batch else None
             labels = batch["label"].to(device)
 
-            # Data augmentation
             audio = audio + torch.randn_like(audio) * 0.05
             visual = visual + torch.randn_like(visual) * 0.05
 
@@ -156,7 +126,6 @@ def train_with_ewc(
             logits = model(audio, visual, text)
             loss = criterion(logits, labels)
 
-            # EWC penalty
             if ewc is not None:
                 loss += ewc_lambda * ewc.penalty(model)
 
@@ -165,7 +134,6 @@ def train_with_ewc(
             optimizer.step()
             total_loss += loss.item() * audio.size(0)
 
-        # Replay old data
         if replay_loader is not None:
             model.train()
             for batch in replay_loader:
@@ -187,7 +155,6 @@ def train_with_ewc(
 
         train_loss = total_loss / len(train_loader.dataset)
 
-        # Validate
         val_metrics = evaluate(model, val_loader, criterion, device)
         val_loss = val_metrics["loss"]
         val_f1 = val_metrics["f1"]

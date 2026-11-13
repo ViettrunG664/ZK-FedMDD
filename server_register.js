@@ -1,4 +1,3 @@
-// Registration Server - Port 3001
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -15,7 +14,6 @@ const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ─── Config ─────────────────────────────────────────── */
 const PORT = process.env.REGISTER_PORT || 3001;
 const app = express();
 app.use(express.json());
@@ -28,12 +26,10 @@ app.use(cors({
 
 app.use(express.static(path.join(__dirname, 'FE')));
 
-// Default route serves the register page
 app.get('/', (_, res) =>
   res.sendFile(path.join(__dirname, 'FE', 'register.html'))
 );
 
-// Timeout wrapper for exec commands
 async function execWithTimeout(cmd, timeout = 30000) {
   const options = { env: { ...process.env, HARDHAT_NETWORK: 'sepolia' } };
   const timeoutPromise = new Promise((_, reject) =>
@@ -42,14 +38,12 @@ async function execWithTimeout(cmd, timeout = 30000) {
   return Promise.race([execAsync(cmd, options), timeoutPromise]);
 }
 
-// Request timeout middleware
 app.use((req, res, next) => {
-  req.setTimeout(180000); // 3 minutes
+  req.setTimeout(180000);
   res.setTimeout(180000);
   next();
 });
 
-/* ─── REGISTRATION API (UNIFIED FOR BOTH DOCTOR & PATIENT) ─────────────────────────────────────────── */
 app.post('/api/register', async (req, res) => {
   const startTime = Date.now();
   console.log('📝 Registration started');
@@ -57,7 +51,6 @@ app.post('/api/register', async (req, res) => {
   try {
     const { hospital, doctorId, role } = req.body;
 
-    // Validation
     if (!hospital || !/^BV\.[A-Z0-9]+$/.test(hospital)) {
       return res.status(400).json({ error: 'Invalid hospital code (expected BV.<NAME>, uppercase alphanumeric)' });
     }
@@ -70,7 +63,6 @@ app.post('/api/register', async (req, res) => {
 
     const identity = `${hospital}:${doctorId}`;
 
-    // Step 1: Generate secret
     console.log(`🔹 Step 1: Generating secret for ${role} (${identity})...`);
     const cmd = `node scripts/01_gen_secret.js --hospital ${hospital} --doctor-id ${doctorId} --role ${role}`;
     const { stdout: stdout1 } = await execWithTimeout(cmd, 10000);
@@ -89,22 +81,18 @@ app.post('/api/register', async (req, res) => {
       });
     }
 
-    // Step 2: Register on blockchain
     console.log('🔹 Step 2: Registering on blockchain...');
     const { hashId } = secretObj;
     const regCmd = `node scripts/03_register.js --hashId ${hashId} --role ${role}`;
     await execWithTimeout(regCmd, 120000);
 
-    // Step 3: Upload to Filecoin (combined: encrypted identity, salt, role)
     console.log('🔹 Step 3: Uploading to Filecoin...');
     let filecoinResult = null;
 
     try {
-      // 3a. Encrypt identity string (hospital:doctorId)
       console.log('  🔐 Encrypting identity...');
       const encryptedIdentity = encryptAES(identity);
 
-      // 3b. Combine all data into single JSON
       const combinedData = {
         identity: {
           encrypted: encryptedIdentity.encrypted,
@@ -116,7 +104,6 @@ app.post('/api/register', async (req, res) => {
         hashId: hashId
       };
 
-      // 3c. Upload combined data to Filecoin (single file)
       console.log('  📤 Uploading combined data (identity + salt + role)...');
       filecoinResult = await pushToFilecoin(
         combinedData,

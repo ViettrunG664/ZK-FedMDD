@@ -1,0 +1,2 @@
+*.sol    text eol=lf
+*.circom text eol=lf

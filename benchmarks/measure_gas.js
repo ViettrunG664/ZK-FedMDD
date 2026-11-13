@@ -1,7 +1,3 @@
-// Gas Measurement Script - Sepolia Testnet
-// Measures gas consumption on Sepolia network
-//
-// Usage: npx hardhat run benchmarks/measure_gas.js --network sepolia
 
 import fs from 'fs';
 import pkg from 'hardhat';

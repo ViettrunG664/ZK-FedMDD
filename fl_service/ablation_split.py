@@ -1,25 +1,3 @@
-"""
-Ablation: local-shared parameter split vs full FedAvg, under IID and non-IID
-(Dirichlet) partitions of D-vlog, for K in {2..6}.
-
-Both variants use the same architecture (FederatedModel), so the only
-difference is the aggregation rule: "full" averages every parameter each
-round; "split" averages the shared backbone only and keeps the per-facility
-projection layers local. The protocol matches the main federated runs
-(benchmark_all.run_fl_n_clients): every facility fits its own scalers,
-batch size and patience come from the config, the global model is validated
-every round, and each facility picks its threshold on its own validation copy.
-Under the split, each facility is evaluated with its own projection layers.
-
-Every run appends one JSON line to --out; runs already present are skipped,
-so an interrupted run resumes where it stopped.
-
-Usage (from fl_service/):
-    python ablation_split.py                    # seeds 42,1,2, K=2..6, 4 configurations
-    python ablation_split.py --seeds 42,1,2,7
-    python ablation_split.py --smoke            # 3 rounds, K in {2, 6}, seed 42
-"""
-
 import os
 import sys
 import copy
@@ -49,13 +27,7 @@ LR = 5e-4
 WD = 1e-3
 
 
-# ─────────────────────────── partitioning ───────────────────────────
 def noniid_partition(pids, label_map, K, alpha=0.5, seed=42, min_per_client=10):
-    """Dirichlet label-skew partition at participant granularity.
-
-    alpha controls skew (smaller = more heterogeneous); min_per_client keeps
-    every shard trainable by moving participants from the largest shard.
-    """
     rng = np.random.default_rng(seed)
     pids = np.asarray(pids)
     labels = np.asarray([label_map[int(p)] for p in pids])
@@ -71,7 +43,6 @@ def noniid_partition(pids, label_map, K, alpha=0.5, seed=42, min_per_client=10):
         for k in range(K):
             client_pids[k].extend(idx[start:start + counts[k]].tolist())
             start += counts[k]
-    # enforce a minimum shard size (moving from the largest shard)
     guard = 0
     while guard < 10000:
         smalls = [k for k in range(K) if len(client_pids[k]) < min_per_client]
@@ -86,9 +57,7 @@ def noniid_partition(pids, label_map, K, alpha=0.5, seed=42, min_per_client=10):
     return client_pids
 
 
-# ─────────────────────────── local training ───────────────────────────
 def train_local(model, site, device, epochs=LOCAL_EPOCHS, lr=LR, wd=WD):
-    """Same local update as the main federated runs; returns the mean training loss."""
     model.train()
     opt = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
     crit = nn.BCEWithLogitsLoss(pos_weight=site["pos_weight"])
@@ -117,7 +86,6 @@ def _round_record(rnd, losses, scores):
             "sites": scores}
 
 
-# ─────────────────────────── FL: full averaging ───────────────────────────
 def run_full(build, sites, device, rounds, patience):
     sizes = [s["size"] for s in sites]
     global_model = build()
@@ -149,7 +117,6 @@ def run_full(build, sites, device, rounds, patience):
     return per_site, {"params": params, "Best Round": best_round, "History": history}
 
 
-# ─────────────────────────── FL: local-shared split ───────────────────────────
 def run_split(build, sites, device, rounds, patience):
     sizes = [s["size"] for s in sites]
     init = build()
@@ -177,7 +144,6 @@ def run_split(build, sites, device, rounds, patience):
             sd = m.state_dict()
             client_proj[i] = OrderedDict((k, sd[k].detach().clone()) for k in proj_keys)
             client_shared.append(OrderedDict((k, sd[k].detach().clone()) for k in shared_keys))
-        # aggregate the SHARED backbone only; projections stay with their facility
         global_shared = _weighted_mean(client_shared, sizes, shared_keys)
 
         scores = [B.site_round_scores(site_model(global_shared, client_proj[i]), s, device)
@@ -194,17 +160,16 @@ def run_split(build, sites, device, rounds, patience):
 
     shared, projs = best_state
     per_site = []
-    for i, site in enumerate(sites):  # each facility uses its own projection layers
+    for i, site in enumerate(sites):
         per_site += B.evaluate_sites(site_model(shared, projs[i]), [site], device)
     return per_site, {"params": params, "local_params": n_local, "shared_params": n_shared,
                       "Best Round": best_round, "History": history}
 
 
-# ─────────────────────────── driver ───────────────────────────
 CONFIGS = [
-    ("Fed-full-iid", "full", "iid"),       # same-architecture full-averaging baseline
-    ("Fed-split-iid", "split", "iid"),     # the local-shared split
-    ("Fed-full-non", "full", "noniid"),    # heterogeneity
+    ("Fed-full-iid", "full", "iid"),
+    ("Fed-split-iid", "split", "iid"),
+    ("Fed-full-non", "full", "noniid"),
     ("Fed-split-non", "split", "noniid"),
 ]
 
@@ -215,7 +180,7 @@ def run_one(name, agg, part, K, seed, data, config, device, rounds, alpha):
     mc = config["model"]
     set_seed(seed)
     if part == "iid":
-        splits = split_pids(data["train_pids"], K, seed)   # same shards as the main FedAvg runs
+        splits = split_pids(data["train_pids"], K, seed)
     else:
         splits = noniid_partition(data["train_pids"], data["label_map"], K, alpha, seed)
     pos_frac = [round(float(np.mean([data["label_map"][int(p)] for p in s])), 2) for s in splits]

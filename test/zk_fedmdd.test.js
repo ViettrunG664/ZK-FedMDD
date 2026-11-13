@@ -1,5 +1,3 @@
-// Security checks for the facility-authentication layer.
-// Usage: npx hardhat test test/zk_fedmdd.test.js
 import crypto from "crypto";
 import { expect } from "chai";
 import pkg from "hardhat";
@@ -50,7 +48,7 @@ describe("ZK-FedMDD facility authentication", function () {
 
   it("stores no witness-derived value on-chain", async () => {
     const u = await ia.users(facilities[0].hashId);
-    expect(u.length).to.equal(3);                       // isDoctor, specCommit, hashId
+    expect(u.length).to.equal(3);
     expect(u[2]).to.equal(facilities[0].hashId);
   });
 
@@ -95,7 +93,7 @@ describe("ZK-FedMDD facility authentication", function () {
     const taskId = await createTask(f0);
     await join(taskId, f1);
     await fl.startRound(taskId);
-    for (const expectRevert of [false, true]) {          // fresh, valid proof both times
+    for (const expectRevert of [false, true]) {
       const wh = randHash();
       const { proof } = await proveFacility(f1.secret, { taskId, round: 1n, payload: toField(wh) });
       const tx = fl.submitUpdate(taskId, wh, CID, 6900, 150, proof, f1.hashId);

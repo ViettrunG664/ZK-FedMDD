@@ -1,7 +1,3 @@
-"""
-Training loop for the Multimodal BiLSTM depression detection model.
-"""
-
 import os
 import torch
 import torch.nn as nn
@@ -14,7 +10,6 @@ from src.evaluate import evaluate
 
 
 class EarlyStopping:
-    """Stop training when validation loss stops improving."""
 
     def __init__(self, patience: int = 10, min_delta: float = 1e-4):
         self.patience = patience
@@ -47,7 +42,6 @@ def train_one_epoch(
     device: torch.device,
     label_smoothing: float = 0.0,
 ) -> float:
-    """Train for one epoch. Returns average loss."""
     model.train()
     total_loss = 0.0
 
@@ -57,12 +51,10 @@ def train_one_epoch(
         text = batch["text"].to(device) if "text" in batch else None
         labels = batch["label"].to(device)
 
-        # Data augmentation: add Gaussian noise to audio/visual features
         if model.training:
             audio = audio + torch.randn_like(audio) * 0.05
             visual = visual + torch.randn_like(visual) * 0.05
 
-        # Label smoothing: 0 → smoothing, 1 → 1-smoothing
         if label_smoothing > 0:
             labels = labels * (1 - label_smoothing) + 0.5 * label_smoothing
 
@@ -86,17 +78,10 @@ def train(
     device: torch.device,
     save_dir: str = "checkpoints",
 ) -> Dict[str, list]:
-    """Full training loop with validation and early stopping.
-
-    Returns:
-        history: Dict with train_loss, val_loss, val_f1 per epoch.
-    """
     os.makedirs(save_dir, exist_ok=True)
 
-    # Loss function with class weights
     weight = None
     if config["training"].get("class_weight"):
-        # pos_weight = num_negative / num_positive
         all_labels = []
         for batch in train_loader:
             all_labels.append(batch["label"])
@@ -108,17 +93,14 @@ def train(
     else:
         criterion = nn.BCEWithLogitsLoss()
 
-    # Optimizer
     lr = config["training"]["learning_rate"]
     wd = config["training"]["weight_decay"]
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
 
-    # Scheduler
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="min", factor=0.5, patience=5
     )
 
-    # Early stopping
     early_stopping = EarlyStopping(patience=config["training"]["patience"])
 
     history = {"train_loss": [], "val_loss": [], "val_f1": []}
@@ -127,10 +109,8 @@ def train(
     label_smoothing = config["training"].get("label_smoothing", 0.0)
     num_epochs = config["training"]["num_epochs"]
     for epoch in range(1, num_epochs + 1):
-        # Train
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device, label_smoothing)
 
-        # Validate
         val_metrics = evaluate(model, val_loader, criterion, device)
         val_loss = val_metrics["loss"]
         val_f1 = val_metrics["f1"]
@@ -138,7 +118,6 @@ def train(
         scheduler.step(val_loss)
         current_lr = optimizer.param_groups[0]["lr"]
 
-        # Log
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
         history["val_f1"].append(val_f1)
@@ -151,17 +130,14 @@ def train(
             f"LR: {current_lr:.6f}"
         )
 
-        # Save best model
         if val_f1 > best_f1:
             best_f1 = val_f1
             torch.save(model.state_dict(), os.path.join(save_dir, "best_model.pt"))
             print(f"  -> Saved best model (F1: {best_f1:.4f})")
 
-        # Early stopping
         if early_stopping.step(val_loss):
             print(f"Early stopping at epoch {epoch}")
             break
 
-    # Save final model
     torch.save(model.state_dict(), os.path.join(save_dir, "final_model.pt"))
     return history

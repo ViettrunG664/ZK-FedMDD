@@ -1,5 +1,3 @@
-// Deploy Contracts and Measure Gas on Sepolia
-// Usage: npx hardhat run scripts/deploy_measure_gas.js --network sepolia
 
 import fs from 'fs';
 import pkg from 'hardhat';
@@ -14,7 +12,6 @@ async function main() {
 
   const results = { timestamp: new Date().toISOString(), deployments: [] };
 
-  // Deploy Verifier
   console.log('Deploying Verifier...');
   const Verifier = await ethers.getContractFactory('Groth16Verifier');
   const verifier = await Verifier.deploy();
@@ -34,7 +31,6 @@ async function main() {
     cost_eth: parseFloat(ethers.formatEther(vCost))
   });
 
-  // Deploy IdentityAccess
   console.log('Deploying IdentityAccess...');
   const IA = await ethers.getContractFactory('IdentityAccess');
   const ia = await IA.deploy(vAddr);
@@ -54,7 +50,6 @@ async function main() {
     cost_eth: parseFloat(ethers.formatEther(iaCost))
   });
 
-  // Summary
   const totalGas = results.deployments.reduce((s, d) => s + d.gas, 0);
   const totalCost = results.deployments.reduce((s, d) => s + d.cost_eth, 0);
   results.summary = { total_gas: totalGas, total_cost_eth: totalCost, total_cost_usd: totalCost * 2000 };

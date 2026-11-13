@@ -1,11 +1,3 @@
-// Security Drills - Test Attack Scenarios
-//
-// Tests:
-// 1. Replay attack (reuse old proof)
-// 2. Tampered proof
-// 3. Wrong public input
-//
-// Usage: node benchmarks/security_drills.js
 
 import fs from 'fs';
 import pkg from 'hardhat';
@@ -19,15 +11,12 @@ async function runSecurityTests() {
     tests: []
   };
 
-  // Get contract
   const iaAddr = fs.readFileSync('contract_address.txt', 'utf8').trim();
   const ia = await ethers.getContractAt('IdentityAccess', iaAddr);
 
-  // Load proof files
   const proof = JSON.parse(fs.readFileSync('client/proof.json', 'utf8'));
   const pub = JSON.parse(fs.readFileSync('client/public.json', 'utf8'));
 
-  // Test 1: Replay Attack (send same proof twice)
   console.log('Test 1: Replay Attack');
   console.log('Sending the same proof multiple times...');
 
@@ -68,7 +57,6 @@ async function runSecurityTests() {
       `${replayResults.success} replays accepted - system vulnerable!`
   });
 
-  // Test 2: Tampered Proof (modify pi_a)
   console.log('\nTest 2: Tampered Proof');
   console.log('Modifying proof data...');
 
@@ -107,7 +95,6 @@ async function runSecurityTests() {
       "CRITICAL: Tampered proof was accepted!"
   });
 
-  // Test 3: Wrong Public Input
   console.log('\nTest 3: Wrong Public Input');
   console.log('Using incorrect hashId...');
 
@@ -145,11 +132,9 @@ async function runSecurityTests() {
       "CRITICAL: Wrong public input accepted!"
   });
 
-  // Save results
   fs.mkdirSync('metrics', { recursive: true });
   fs.writeFileSync('metrics/security_results.json', JSON.stringify(results, null, 2));
 
-  // Print summary
   console.log('\n' + '='.repeat(60));
   console.log('Security Drill Results');
   console.log('='.repeat(60));

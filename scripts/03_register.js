@@ -1,10 +1,3 @@
-// scripts/03_register.js
-// UNIFIED VERSION - No spec/pending check
-// node scripts/03_register.js --hashId "xxx" --role doctor
-// node scripts/03_register.js --hashId "xxx" --role patient
-// Only hashId goes on-chain; h = sha256(id‖salt) is the ZK witness and stays off-chain.
-// The signer must be the IdentityAccess registrar (the deployer) and becomes
-// the sponsoring (relayer) wallet of this hashId.
 
 import pkg from "hardhat";
 const { ethers } = pkg;
@@ -27,17 +20,14 @@ async function main() {
   const ia = await ethers.getContractAt("IdentityAccess", iaAddr);
   const [signer] = await ethers.getSigners();
 
-  // Convert hashId to hex
   const hashIdBigInt = BigInt(hashId);
   const hashIdHex = ethers.toBeHex(hashIdBigInt, 32);
 
-  // Determine if doctor
   const isDoctor = (role === 'doctor');
 
-  // Register with ZeroHash as spec (unified approach)
   const tx = await ia.connect(signer).register(
     hashIdHex,
-    ethers.ZeroHash,  // No spec for both doctor and patient
+    ethers.ZeroHash,
     isDoctor,
     signer.address
   );

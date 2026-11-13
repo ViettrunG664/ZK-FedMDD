@@ -1,4 +1,3 @@
-// Helper functions for loading overlay
 function showLoading(message, subtitle = '') {
   hideLoading();
   const modal = document.createElement('div');
@@ -19,10 +18,8 @@ function hideLoading() {
   if (modal) modal.remove();
 }
 
-// Xử lý submit form đăng ký + Tích hợp gọi API backend
 document.getElementById('registerForm').addEventListener('submit', async function (event) {
   event.preventDefault();
-  // Accept composite identity in the username field: "BV.<NAME>:<8-alnum>"
   const raw  = document.getElementById('username').value.trim().toUpperCase();
   const role = document.getElementById('role').value;
 
@@ -34,13 +31,11 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   const [, hospital, doctorId] = match;
   const data = { hospital, doctorId, role };
 
-  // Show loading
   showLoading(
     'Creating your account...',
     'Registering on blockchain (may take 3-10 seconds)'
   );
 
-  // Gọi API backend (Registration Server - Port 3001)
   let result;
   try {
     const res = await fetch('http://localhost:3001/api/register', {
@@ -59,11 +54,9 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     return;
   }
 
-  // Hiển thị popup với số salt và hashId
   document.getElementById('Salt-number').innerText =
     `Registration successful!\nYour "salt number": ${result.salt}\nSave this "Salt number" for future logins.`;
 
-  // Lưu lại số salt ở thuộc tính cho chức năng copy và tải về
   document.getElementById('Salt-number').setAttribute('data-salt', result.salt);
 
   document.getElementById('popup').style.display = 'flex';
@@ -76,7 +69,6 @@ function copySalt() {
   alert('Copied!');
 }
 
-// Tải xuống dưới dạng txt
 function downloadCongrats() {
   const msg = document.getElementById('Salt-number').innerText;
   const blob = new Blob([msg], { type: "text/plain;charset=utf-8" });
@@ -88,7 +80,6 @@ function downloadCongrats() {
   document.body.removeChild(link);
 }
 
-// Đóng popup và chuyển hướng về login.html
 function closePopup() {
   document.getElementById('popup').style.display = 'none';
   window.location.href = 'http://localhost:3000/login.html';

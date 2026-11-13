@@ -1,4 +1,3 @@
-# fast_prove/main.py
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import subprocess, json, os, sys, pathlib, hashlib, time, re
@@ -7,7 +6,6 @@ import logging
 
 IDENTITY_RE = re.compile(r"^BV\.[A-Z0-9]+:[A-Z0-9]{8}$")
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -21,48 +19,40 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-BASE_DIR = pathlib.Path(__file__).resolve().parents[1]  # thư mục gốc dự án
+BASE_DIR = pathlib.Path(__file__).resolve().parents[1]
 CLIENT = BASE_DIR / "client"
 
-# Simple in-memory cache with TTL
-# For production, use Redis or similar
 PROOF_CACHE = {}
-CACHE_TTL = 3600  # 1 hour in seconds
+CACHE_TTL = 3600
 
 class ProveRequest(BaseModel):
-    identity: str  # composite practitioner id, e.g. "BV.HOSPA:A3X7K2PQ"
+    identity: str
     salt: str
-    # Proof context checked by the contract; (0, 0, 0) = login
     task_id: str = "0"
     round: str = "0"
-    payload: str = "0"   # weightsHash (0x-hex) for submitUpdate
+    payload: str = "0"
 
 def get_cache_key(body: ProveRequest) -> str:
-    """Generate cache key from identity, salt and proof context"""
     return hashlib.sha256(
         f"{body.identity}|{body.salt}|{body.task_id}|{body.round}|{body.payload}".encode()
     ).hexdigest()
 
 def get_from_cache(cache_key: str):
-    """Get proof from cache if not expired"""
     if cache_key in PROOF_CACHE:
         cached_data, timestamp = PROOF_CACHE[cache_key]
         if time.time() - timestamp < CACHE_TTL:
             logger.info(f"✅ Cache HIT for key {cache_key[:8]}...")
             return cached_data
         else:
-            # Expired, remove from cache
             logger.info(f"⏰ Cache EXPIRED for key {cache_key[:8]}...")
             del PROOF_CACHE[cache_key]
     return None
 
 def save_to_cache(cache_key: str, data):
-    """Save proof to cache with current timestamp"""
     PROOF_CACHE[cache_key] = (data, time.time())
     logger.info(f"💾 Cached proof for key {cache_key[:8]}...")
 
 def run(cmd: list[str], timeout=30):
-    """Run subprocess with timeout"""
     try:
         res = subprocess.run(cmd, cwd=BASE_DIR, capture_output=True, text=True, timeout=timeout)
         if res.returncode != 0:
@@ -75,10 +65,8 @@ def run(cmd: list[str], timeout=30):
 
 @app.post("/prove")
 def prove(body: ProveRequest):
-    """Generate ZK proof with caching"""
     start_time = time.time()
 
-    # Validate inputs
     if not body.identity or not body.salt:
         raise HTTPException(status_code=400, detail="Missing identity or salt")
 
@@ -86,7 +74,6 @@ def prove(body: ProveRequest):
         raise HTTPException(status_code=400,
                             detail="Invalid identity format (expected BV.<NAME>:<8-alnum>)")
 
-    # Check cache first
     cache_key = get_cache_key(body)
     cached_result = get_from_cache(cache_key)
 
@@ -95,7 +82,6 @@ def prove(body: ProveRequest):
         logger.info(f"⚡ Returned cached proof in {elapsed:.2f}ms")
         return cached_result
 
-    # Cache miss - generate new proof
     logger.info(f"🔄 Cache MISS - generating new proof for {body.identity}")
 
     cmd = [sys.executable, str(CLIENT / "prove.py"),
@@ -103,9 +89,8 @@ def prove(body: ProveRequest):
            "--task-id", body.task_id, "--round", body.round, "--payload", body.payload]
     
     try:
-        run(cmd, timeout=120)  # ZK proof can take up to 2 minutes
+        run(cmd, timeout=120)
         
-        # Read generated files
         proof_file = CLIENT / "proof.json"
         public_file = CLIENT / "public.json"
         
@@ -117,7 +102,6 @@ def prove(body: ProveRequest):
         
         result = {"proof": proof, "pub": pub}
         
-        # Save to cache
         save_to_cache(cache_key, result)
         
         elapsed = (time.time() - start_time) * 1000
@@ -134,7 +118,6 @@ def prove(body: ProveRequest):
 
 @app.get("/cache/stats")
 def cache_stats():
-    """Get cache statistics"""
     total_entries = len(PROOF_CACHE)
     expired_count = 0
     current_time = time.time()
@@ -152,7 +135,6 @@ def cache_stats():
 
 @app.delete("/cache/clear")
 def clear_cache():
-    """Clear all cached proofs"""
     count = len(PROOF_CACHE)
     PROOF_CACHE.clear()
     logger.info(f"🗑️ Cleared {count} cached proofs")
@@ -160,5 +142,4 @@ def clear_cache():
 
 @app.get("/health")
 def health_check():
-    """Health check endpoint"""
     return {"status": "ok", "service": "ZK-Prove"}

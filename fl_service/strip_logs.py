@@ -1,13 +1,3 @@
-"""
-Remove per-participant labels and scores from the run logs before release.
-
-The per-facility test labels and predicted probabilities in results/*.jsonl derive
-from D-vlog, which may not be redistributed. This script replaces them with the two
-descriptive ROC operating points that paper_tables_r1.py reports, so every table can
-still be regenerated from the released logs. Confusion-matrix counts are kept.
-
-    python strip_logs.py results/r1_runs.jsonl released/r1_runs.jsonl
-"""
 import json
 import sys
 
@@ -18,7 +8,6 @@ DROP = ("labels", "probs")
 
 
 def roc_operating_points(labels, probs):
-    """Specificity at sensitivity >= 0.80 and sensitivity at specificity >= 0.60."""
     fpr, tpr, _ = roc_curve(labels, probs)
     return float(1 - fpr[np.argmax(tpr >= 0.80)]), float(tpr[fpr <= 0.40].max())
 

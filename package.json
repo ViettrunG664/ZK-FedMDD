@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "circom": ".\\tools\\circom.exe",
+    "circom": "circom",
     "build:circuits": "npm run circom -- -l ./circomlib/circuits circuits/hashlogin.circom --r1cs --wasm --sym -o \"circuits/build\"",
     "postbuild:circuits": "node scripts/witness_to_cjs.cjs",
     "setup": "hardhat run scripts/setup_zkey.js --network sepolia",

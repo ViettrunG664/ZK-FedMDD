@@ -1,5 +1,3 @@
-// FL Server - Port 3002
-// Bridges Frontend <-> FL Service (Python) <-> Blockchain <-> Filecoin
 
 import 'dotenv/config';
 
@@ -31,14 +29,12 @@ app.use(cors({
 
 app.use(express.static(path.join(__dirname, 'FE')));
 
-// Request timeout
 app.use((req, res, next) => {
-  req.setTimeout(300000); // 5 min
+  req.setTimeout(300000);
   res.setTimeout(300000);
   next();
 });
 
-/* ─── Contract Helper ─── */
 async function getFlContract() {
   const addr = fs.readFileSync('fl_contract_address.txt', 'utf8').trim();
   return ethers.getContractAt('FederatedLearning', addr);
@@ -49,7 +45,6 @@ async function getSigner() {
   return signer;
 }
 
-/* ─── FL Service Helper ─── */
 async function flFetch(endpoint, options = {}) {
   const url = `${FL_SERVICE_URL}${endpoint}`;
   const res = await fetch(url, {
@@ -63,11 +58,6 @@ async function flFetch(endpoint, options = {}) {
   return res.json();
 }
 
-/**
- * Fetch the raw npz-serialized weights for a key from the FL service.
- * @param {string} key - weights_key returned by /model/init, /train, /aggregate
- * @returns {Promise<{key:string, sha256:string, bytes:number, b64:string}>}
- */
 async function fetchWeightsBlob(key) {
   const res = await fetch(`${FL_SERVICE_URL}/weights/${encodeURIComponent(key)}/blob`);
   if (!res.ok) {
@@ -77,20 +67,6 @@ async function fetchWeightsBlob(key) {
   return res.json();
 }
 
-/**
- * Build an AES-256-encrypted Filecoin payload for a set of model weights.
- * The weight bytes and any sensitive metadata are encrypted together; only the
- * integrity hash (SHA-256 of the plaintext npz, i.e. the value committed
- * on-chain) is left in the clear so the ciphertext can be matched to its
- * on-chain record. Retrieval reverses this with decryptAES using the same
- * AES_KEY. This closes the content-level confidentiality gap for weights at
- * rest on IPFS/Filecoin (mitigating model/gradient-inversion exposure).
- * @param {string} weightsKey - key to fetch from the FL service
- * @param {string} type - payload type tag (e.g. 'fl_local_weights')
- * @param {string} sha256 - plaintext integrity hash, as committed on-chain
- * @param {object} secretMeta - extra fields to encrypt alongside the weights
- * @returns {Promise<object>} encrypted payload ready for pushToFilecoin
- */
 async function buildEncryptedWeightsPayload(weightsKey, type, sha256, secretMeta = {}) {
   const blob = await fetchWeightsBlob(weightsKey);
   const plaintext = JSON.stringify({ weights_b64: blob.b64, sha256, ...secretMeta });
@@ -100,22 +76,11 @@ async function buildEncryptedWeightsPayload(weightsKey, type, sha256, secretMeta
     alg: 'aes-256-cbc',
     iv,
     ciphertext: encrypted,
-    sha256,          // integrity hash over PLAINTEXT weights (matches on-chain)
+    sha256,
     bytes: blob.bytes,
   };
 }
 
-/* ─── ZK Proof Helper ─── */
-/**
- * Generate ZK proof + hashId for a facility, using hospital-bound practitioner
- * identity (HOSPITAL:DOCTOR_ID) and salt from .env.
- * @param {string} facilityId - e.g. "1", "2", "3" (matches
- *                              FACILITY_<id>_HOSPITAL / _DOCTOR_ID / _SALT).
- * @param {{taskId?, round?, payload?}} ctx - proof context the contract checks:
- *        createTask (newTaskId, 0, initialWeightsHash), joinTask (taskId, 0, 0),
- *        submitUpdate (taskId, currentRound, weightsHash).
- * @returns {Promise<{proof:{a,b,c}, facilityHashId:string}>}
- */
 async function generateFacilityProof(facilityId, { taskId = 0, round = 0, payload = '0' } = {}) {
   const hospital = process.env[`FACILITY_${facilityId}_HOSPITAL`];
   const doctorId = process.env[`FACILITY_${facilityId}_DOCTOR_ID`];
@@ -142,8 +107,6 @@ async function generateFacilityProof(facilityId, { taskId = 0, round = 0, payloa
   }
   const { proof, pub } = await res.json();
 
-  // Convert snarkjs format → Solidity Verifier format
-  // Note: pi_b requires index swap (snarkjs convention vs solidity)
   const proofStruct = {
     a: [BigInt(proof.pi_a[0]), BigInt(proof.pi_a[1])],
     b: [
@@ -157,7 +120,6 @@ async function generateFacilityProof(facilityId, { taskId = 0, round = 0, payloa
   return { proof: proofStruct, facilityHashId };
 }
 
-/* ─── Health Check ─── */
 app.get('/api/fl/health', async (req, res) => {
   try {
     const flHealth = await flFetch('/health');
@@ -174,18 +136,6 @@ app.get('/api/fl/health', async (req, res) => {
   }
 });
 
-/* ─── Phase 2: Read-only service-status fan-out ───────────────────────
-   GET /api/fl/services
-   Probes the five process ports with short-timeout GET requests and
-   reports up/offline status. Used by the thesis research dashboard
-   (FE/research_dashboard.html) in Live Mode.
-
-   Strictly read-only:
-     - No /prove, /train, /aggregate, /model/init, /hospitals calls.
-     - No Sepolia transactions.
-     - No Filecoin / Lighthouse uploads.
-     - No secrets, RPC URLs, or env values exposed in the response.
-   ─────────────────────────────────────────────────────────────────── */
 async function probeHealth(url, timeoutMs = 2000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -202,7 +152,6 @@ async function probeHealth(url, timeoutMs = 2000) {
 app.get('/api/fl/services', async (req, res) => {
   const checkedAt = new Date().toISOString();
 
-  // FL bridge probes itself directly (this very process is serving the request).
   const [loginRes, registerRes, zkRes, flSvcRes] = await Promise.allSettled([
     probeHealth('http://localhost:3000/', 2000),
     probeHealth('http://localhost:3001/', 2000),
@@ -256,15 +205,6 @@ app.get('/api/fl/services', async (req, res) => {
   res.json({ mode: 'live', checked_at: checkedAt, services });
 });
 
-/* ─── Phase 3: Data Collection (webcam capture + video upload) ────────
-   Saves user-provided webcam recordings or uploaded video files to disk
-   under ./collected_data/. Strictly local file I/O only. Never:
-     - extracts features
-     - runs inference
-     - calls /train, /prove, /aggregate, /model/init, /hospitals
-     - sends a Sepolia transaction
-     - uploads to Filecoin / Lighthouse
-   ─────────────────────────────────────────────────────────────────── */
 const COLLECTED_DIR = path.join(__dirname, 'collected_data');
 const COLLECT_MAX_BYTES = 50 * 1024 * 1024;
 const COLLECT_MIME_TO_EXT = {
@@ -358,7 +298,6 @@ app.get('/api/collect/file/:name', (req, res) => {
   fs.createReadStream(resolved).pipe(res);
 });
 
-/* ─── 1) Create Task ─── */
 app.post('/api/fl/task/create', async (req, res) => {
   console.log('📝 Creating FL task...');
   try {
@@ -370,11 +309,9 @@ app.post('/api/fl/task/create', async (req, res) => {
       });
     }
 
-    // 1. Init model via FL Service
     console.log('  ① Init model...');
     const initResult = await flFetch('/model/init');
 
-    // 2. Encrypt (AES-256) + upload initial weights to Filecoin
     console.log('  ② Encrypt + upload initial weights to Filecoin...');
     const weightsData = await buildEncryptedWeightsPayload(
       initResult.weights_key,
@@ -389,14 +326,12 @@ app.post('/api/fl/task/create', async (req, res) => {
     const modelHashBytes32 = ethers.zeroPadValue('0x' + initResult.sha256.slice(0, 64), 32);
     const weightsHashBytes32 = ethers.zeroPadValue('0x' + initResult.sha256.slice(0, 64), 32);
 
-    // 3. Generate ZK proof for creator facility, bound to the new task + initial weights
     console.log(`  ③ Generating ZK proof for facility ${facilityId}...`);
     const newTaskId = (await fl.taskCount()) + 1n;
     const { proof, facilityHashId } = await generateFacilityProof(facilityId, {
       taskId: newTaskId, payload: weightsHashBytes32,
     });
 
-    // 4. Submit to blockchain
     console.log('  ④ Registering on blockchain...');
 
     const taskParams = {
@@ -411,7 +346,6 @@ app.post('/api/fl/task/create', async (req, res) => {
     const tx = await fl.connect(signer).createTask(taskParams, proof, facilityHashId);
     const receipt = await tx.wait();
 
-    // Parse taskId from event
     const taskCreatedEvent = receipt.logs.find(log => {
       try { return fl.interface.parseLog(log)?.name === 'TaskCreated'; } catch { return false; }
     });
@@ -435,7 +369,6 @@ app.post('/api/fl/task/create', async (req, res) => {
   }
 });
 
-/* ─── 2) Join Task ─── */
 app.post('/api/fl/task/:id/join', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -468,7 +401,6 @@ app.post('/api/fl/task/:id/join', async (req, res) => {
   }
 });
 
-/* ─── 3) Start Round ─── */
 app.post('/api/fl/task/:id/start-round', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -481,7 +413,7 @@ app.post('/api/fl/task/:id/start-round', async (req, res) => {
     const receipt = await tx.wait();
 
     const info = await fl.getTaskInfo(taskId);
-    const currentRound = Number(info[4]); // currentRound
+    const currentRound = Number(info[4]);
 
     console.log(`  ✅ Round ${currentRound} started`);
     res.json({ taskId, currentRound, txHash: tx.hash, gasUsed: Number(receipt.gasUsed) });
@@ -491,7 +423,6 @@ app.post('/api/fl/task/:id/start-round', async (req, res) => {
   }
 });
 
-/* ─── 4) Train (local training + submit to blockchain) ─── */
 app.post('/api/fl/task/:id/train', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -503,13 +434,11 @@ app.post('/api/fl/task/:id/train', async (req, res) => {
 
     console.log(`🏋️ Facility ${facilityId} training task #${taskId} on ${hospitalId}...`);
 
-    // 1. Get current global model CID from blockchain
     console.log('  ① Reading global model from blockchain...');
     const fl = await getFlContract();
     const taskModel = await fl.getTaskModel(taskId);
     const globalModelCID = taskModel[1];
 
-    // 2. Train via FL Service
     console.log(`  ② Training on ${hospitalId} (${epochs || 5} epochs)...`);
     const trainResult = await flFetch('/train', {
       method: 'POST',
@@ -520,10 +449,6 @@ app.post('/api/fl/task/:id/train', async (req, res) => {
       }),
     });
 
-    // 3. Encrypt (AES-256) + upload weights to Filecoin.
-    //    Sensitive metadata (hospital, facility, accuracy) is encrypted with
-    //    the weights so the Filecoin object leaks neither the model nor the
-    //    contributing facility.
     console.log('  ③ Encrypt + upload weights to Filecoin...');
     const weightsData = await buildEncryptedWeightsPayload(
       trainResult.weights_key,
@@ -537,7 +462,6 @@ app.post('/api/fl/task/:id/train', async (req, res) => {
       'Local model weights (AES-256 encrypted)'
     );
 
-    // 4. Generate ZK proof for this facility, bound to (task, current round, weights)
     console.log(`  ④ Generating ZK proof for facility ${facilityId}...`);
     const weightsHash = ethers.zeroPadValue('0x' + trainResult.weights_sha256.slice(0, 64), 32);
     const currentRound = (await fl.getTaskInfo(taskId))[4];
@@ -545,7 +469,6 @@ app.post('/api/fl/task/:id/train', async (req, res) => {
       taskId, round: currentRound, payload: weightsHash,
     });
 
-    // 5. Submit to blockchain
     console.log('  ⑤ Submitting to blockchain...');
     const signer = await getSigner();
     const accuracyInt = Math.round(trainResult.accuracy * 10000);
@@ -583,7 +506,6 @@ app.post('/api/fl/task/:id/train', async (req, res) => {
   }
 });
 
-/* ─── 5) Aggregate ─── */
 app.post('/api/fl/task/:id/aggregate', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -592,22 +514,18 @@ app.post('/api/fl/task/:id/aggregate', async (req, res) => {
     const fl = await getFlContract();
     const signer = await getSigner();
 
-    // 1. Read all submissions for current round
     const info = await fl.getTaskInfo(taskId);
     const currentRound = Number(info[4]);
     const updateCount = Number(await fl.getRoundUpdateCount(taskId, currentRound));
 
     console.log(`  ① Round ${currentRound}: ${updateCount} submissions`);
 
-    // 2. Collect weight keys and data sizes from FL Service
-    // (In full implementation, would download from Filecoin CIDs)
     const { weightKeys, dataSizes } = req.body;
 
     if (!weightKeys || !dataSizes || weightKeys.length < 2) {
       return res.status(400).json({ error: 'Need weightKeys and dataSizes (min 2)' });
     }
 
-    // 3. Aggregate via FL Service
     console.log(`  ② Aggregating ${weightKeys.length} updates...`);
     const aggResult = await flFetch('/aggregate', {
       method: 'POST',
@@ -618,7 +536,6 @@ app.post('/api/fl/task/:id/aggregate', async (req, res) => {
       }),
     });
 
-    // 4. Encrypt (AES-256) + upload global model to Filecoin
     console.log('  ③ Encrypt + upload global model to Filecoin...');
     const globalData = await buildEncryptedWeightsPayload(
       aggResult.global_weights_key,
@@ -637,7 +554,6 @@ app.post('/api/fl/task/:id/aggregate', async (req, res) => {
       `Global model task #${taskId} round ${currentRound} (AES-256 encrypted)`
     );
 
-    // 5. Submit aggregation to blockchain
     console.log('  ④ Submitting aggregation to blockchain...');
     const globalHash = ethers.zeroPadValue('0x' + aggResult.global_weights_sha256.slice(0, 64), 32);
 
@@ -648,9 +564,8 @@ app.post('/api/fl/task/:id/aggregate', async (req, res) => {
     );
     const receipt = await tx.wait();
 
-    // Check if task completed
     const updatedInfo = await fl.getTaskInfo(taskId);
-    const status = Number(updatedInfo[2]); // getTaskInfo returns (creator, description, status, ...)
+    const status = Number(updatedInfo[2]);
 
     console.log(`  ✅ Aggregation done. Status: ${['RECRUITING','TRAINING','AGGREGATING','COMPLETED','CANCELLED'][status]}`);
 
@@ -672,7 +587,6 @@ app.post('/api/fl/task/:id/aggregate', async (req, res) => {
   }
 });
 
-/* ─── 6) Get Tasks List ─── */
 app.get('/api/fl/tasks', async (req, res) => {
   try {
     const fl = await getFlContract();
@@ -700,7 +614,6 @@ app.get('/api/fl/tasks', async (req, res) => {
   }
 });
 
-/* ─── 7) Get Task Detail ─── */
 app.get('/api/fl/task/:id', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -711,7 +624,6 @@ app.get('/api/fl/task/:id', async (req, res) => {
     const participantCount = Number(await fl.getTaskParticipantCount(taskId));
     const participants = await fl.getParticipants(taskId);
 
-    // Get updates for current round
     const currentRound = Number(info[4]);
     const updateCount = currentRound > 0
       ? Number(await fl.getRoundUpdateCount(taskId, currentRound))
@@ -751,7 +663,6 @@ app.get('/api/fl/task/:id', async (req, res) => {
   }
 });
 
-/* ─── 8) Cancel Task ─── */
 app.post('/api/fl/task/:id/cancel', async (req, res) => {
   try {
     const taskId = parseInt(req.params.id);
@@ -767,7 +678,6 @@ app.post('/api/fl/task/:id/cancel', async (req, res) => {
   }
 });
 
-/* ─── Start Server ─── */
 app.listen(PORT, () =>
   console.log(`🚀 FL Server listening on http://localhost:${PORT}`)
 );

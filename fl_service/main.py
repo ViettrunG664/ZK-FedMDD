@@ -1,13 +1,3 @@
-# fl_service/main.py
-# FastAPI service for Federated Learning on D-vlog (BiLSTM + Attention)
-# Port 7001
-#
-# Usage:
-#   python -m uvicorn fl_service.main:app --host localhost --port 7001 --reload
-#
-# First /model/init or /train call triggers heavy dataset loading (~2-5 min).
-# Subsequent calls are fast (dataset cached in memory + pickle on disk).
-
 import os
 import sys
 import json
@@ -31,7 +21,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# ─── Paths ───
 FL_SERVICE_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(FL_SERVICE_DIR))
 
@@ -41,11 +30,9 @@ from src.dvlog_feature_extraction import DVlogFeatureExtractor, build_dvlog_wind
 from src.dataset import DepressionDataset
 from src.model import MultimodalBiLSTM
 
-# ─── Logging ───
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger("fl_service")
 
-# ─── FastAPI ───
 app = FastAPI(title="FL-Service", description="Federated Learning service for MDD detection (D-vlog + BiLSTM)")
 
 app.add_middleware(
@@ -56,7 +43,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ─── Global state (lazy-initialized) ───
 CONFIG_PATH = FL_SERVICE_DIR / "configs" / "dvlog_config.yaml"
 WEIGHTS_DIR = FL_SERVICE_DIR / "weights"
 CACHE_DIR = FL_SERVICE_DIR / "cache"
@@ -66,15 +52,14 @@ CACHE_DIR.mkdir(exist_ok=True)
 HOSPITAL_IDS = ["hospital_a", "hospital_b", "hospital_c"]
 NUM_HOSPITALS = len(HOSPITAL_IDS)
 
-weights_store: Dict[str, Dict[str, np.ndarray]] = {}   # key -> numpy state dict
+weights_store: Dict[str, Dict[str, np.ndarray]] = {}
 
-# Heavy objects built on first /model/init or /train call
 _FL: Dict = {
     "ready": False,
     "device": None,
     "config": None,
-    "hospital_loaders": {},   # hospital_id -> DataLoader
-    "hospital_sizes": {},     # hospital_id -> num participants (for FedAvg weighting)
+    "hospital_loaders": {},
+    "hospital_sizes": {},
     "val_loader": None,
     "test_loader": None,
     "audio_dim": None,
@@ -82,7 +67,6 @@ _FL: Dict = {
 }
 
 
-# ─── Request Models ───
 class TrainRequest(BaseModel):
     hospital_id: str
     global_weights_key: Optional[str] = None
@@ -93,10 +77,9 @@ class TrainRequest(BaseModel):
 class AggregateRequest(BaseModel):
     weight_keys: List[str]
     data_sizes: List[int]
-    test_hospital: Optional[str] = None  # ignored in D-vlog mode; test_loader is shared
+    test_hospital: Optional[str] = None
 
 
-# ─── Helpers: weight serialization ───
 def state_dict_to_numpy(state_dict) -> Dict[str, np.ndarray]:
     return {k: v.detach().cpu().numpy() for k, v in state_dict.items()}
 
@@ -115,7 +98,6 @@ def save_weights(numpy_dict: Dict[str, np.ndarray], prefix: str = "weights"):
 
     weights_store[key] = numpy_dict
 
-    # Persist to disk too
     np.savez(str(WEIGHTS_DIR / f"{key}.npz"), **numpy_dict)
 
     return key, sha
@@ -135,7 +117,6 @@ def load_weights(key: str) -> Optional[Dict[str, np.ndarray]]:
     return None
 
 
-# ─── Model factory ───
 def build_model() -> MultimodalBiLSTM:
     mc = _FL["config"]["model"]
     return MultimodalBiLSTM(
@@ -148,7 +129,6 @@ def build_model() -> MultimodalBiLSTM:
     ).to(_FL["device"])
 
 
-# ─── Split 961 participants into 3 hospitals ───
 def split_pids_into_hospitals(pids: List[int], seed: int = 42) -> Dict[str, List[int]]:
     rng = np.random.default_rng(seed)
     shuffled = rng.permutation(pids)
@@ -156,9 +136,7 @@ def split_pids_into_hospitals(pids: List[int], seed: int = 42) -> Dict[str, List
     return {hid: c.tolist() for hid, c in zip(HOSPITAL_IDS, chunks)}
 
 
-# ─── Lazy initialization ───
 def _try_load_cache():
-    """Try to load cached datasets + scaler + dims from disk."""
     meta_path = CACHE_DIR / "fl_meta.json"
     if not meta_path.exists():
         return None
@@ -171,7 +149,6 @@ def _try_load_cache():
 
 
 def ensure_initialized():
-    """Build dvlog + hospital loaders. Called lazily."""
     if _FL["ready"]:
         return
 
@@ -195,7 +172,6 @@ def ensure_initialized():
     test_labels = dataset.load_labels("test")
     logger.info(f"  dvlog: {len(train_pids)} train, {len(valid_pids)} valid, {len(test_pids)} test")
 
-    # Fit scalers on ALL train data
     logger.info("  fitting scalers on train set...")
     raw_segs = []
     for pid in train_pids:
@@ -210,7 +186,6 @@ def ensure_initialized():
     wc = config["preprocessing"]["windowing"]
     ws, stride = wc["window_size"], wc["stride"]
 
-    # Shared val / test loaders
     logger.info("  building val/test loaders...")
     val_feat, val_y, val_wp = build_dvlog_windowed_dataset(
         dataset, valid_pids, valid_labels, extractor, ws, stride)
@@ -222,7 +197,6 @@ def ensure_initialized():
     val_loader = DataLoader(val_ds, batch_size=16, shuffle=False)
     test_loader = DataLoader(test_ds, batch_size=16, shuffle=False)
 
-    # Split train PIDs into NUM_HOSPITALS groups
     hospital_pids = split_pids_into_hospitals(train_pids)
     hospital_loaders = {}
     hospital_sizes = {}
@@ -236,7 +210,6 @@ def ensure_initialized():
         hospital_sizes[hid] = len(pids)
         logger.info(f"  {hid}: {len(pids)} participants, {len(ds)} windows")
 
-    # Detect dims from val_ds sample
     sample = val_ds[0]
     audio_dim = sample["audio"].shape[-1]
     visual_dim = sample["visual"].shape[-1]
@@ -255,10 +228,8 @@ def ensure_initialized():
     logger.info(f"✅ FL state ready in {elapsed:.1f}s (audio_dim={audio_dim}, visual_dim={visual_dim})")
 
 
-# ─── Evaluation ───
 @torch.no_grad()
 def evaluate_accuracy(model: nn.Module, loader: DataLoader) -> float:
-    """Simple threshold-0.5 accuracy over val loader."""
     model.eval()
     device = _FL["device"]
     correct = 0
@@ -274,10 +245,8 @@ def evaluate_accuracy(model: nn.Module, loader: DataLoader) -> float:
     return correct / max(total, 1)
 
 
-# ─── Local training ───
 def train_one_hospital(hospital_id: str, global_weights: Optional[Dict[str, np.ndarray]],
                        epochs: int, lr: float) -> Dict:
-    """Train the MultimodalBiLSTM locally on one hospital's DataLoader."""
     loader = _FL["hospital_loaders"][hospital_id]
     device = _FL["device"]
 
@@ -287,7 +256,6 @@ def train_one_hospital(hospital_id: str, global_weights: Optional[Dict[str, np.n
         sd = numpy_to_state_dict(global_weights)
         model.load_state_dict(sd)
 
-    # Loss + pos_weight
     all_labels = torch.cat([b["label"] for b in loader]).squeeze()
     num_pos = all_labels.sum().item()
     num_neg = len(all_labels) - num_pos
@@ -305,7 +273,7 @@ def train_one_hospital(hospital_id: str, global_weights: Optional[Dict[str, np.n
             audio = batch["audio"].to(device) + torch.randn_like(batch["audio"]).to(device) * 0.05
             visual = batch["visual"].to(device) + torch.randn_like(batch["visual"]).to(device) * 0.05
             labels = batch["label"].to(device)
-            labels = labels * 0.95 + 0.025  # label smoothing
+            labels = labels * 0.95 + 0.025
 
             optimizer.zero_grad()
             logits = model(audio, visual)
@@ -317,13 +285,10 @@ def train_one_hospital(hospital_id: str, global_weights: Optional[Dict[str, np.n
             ep_count += audio.size(0)
         avg_loss = ep_loss / max(ep_count, 1)
 
-    # Evaluate on shared val set
     acc = evaluate_accuracy(model, _FL["val_loader"])
 
-    # data_size: number of training WINDOWS (used for FedAvg weighting)
     data_size = len(loader.dataset)
 
-    # Return numpy weights
     np_weights = state_dict_to_numpy(model.state_dict())
     return {
         "weights": np_weights,
@@ -333,9 +298,7 @@ def train_one_hospital(hospital_id: str, global_weights: Optional[Dict[str, np.n
     }
 
 
-# ─── FedAvg ───
 def federated_average(updates: List[Dict]) -> Dict[str, np.ndarray]:
-    """Weighted average of client weights."""
     total = sum(u["data_size"] for u in updates)
     if total == 0:
         raise ValueError("Total data_size is zero")
@@ -352,7 +315,6 @@ def federated_average(updates: List[Dict]) -> Dict[str, np.ndarray]:
     return avg
 
 
-# ─── Endpoints ───
 @app.get("/health")
 def health():
     return {
@@ -384,7 +346,6 @@ def model_info():
 
 @app.get("/model/init")
 def init_model():
-    """Create fresh global model and return its initial weights key."""
     ensure_initialized()
     model = build_model()
     np_weights = state_dict_to_numpy(model.state_dict())
@@ -396,7 +357,6 @@ def init_model():
 
 @app.post("/train")
 def train(req: TrainRequest):
-    """Train BiLSTM locally on one hospital's share of D-vlog."""
     ensure_initialized()
 
     if req.hospital_id not in HOSPITAL_IDS:
@@ -429,7 +389,6 @@ def train(req: TrainRequest):
 
 @app.post("/aggregate")
 def aggregate(req: AggregateRequest):
-    """FedAvg over a list of weight keys; optionally evaluate on test set."""
     ensure_initialized()
 
     if len(req.weight_keys) != len(req.data_sizes):
@@ -449,7 +408,6 @@ def aggregate(req: AggregateRequest):
 
     avg_np = federated_average(updates)
 
-    # Evaluate on shared test_loader
     test_acc = None
     try:
         model = build_model()
@@ -489,13 +447,6 @@ def get_weights_hash(key: str):
 
 @app.get("/weights/{key}/blob")
 def get_weights_blob(key: str):
-    """Return the raw npz-serialized weights for a key, base64-encoded.
-
-    The Node bridge fetches this so it can AES-256-encrypt the weight
-    bytes before pushing them to Filecoin (content-level confidentiality
-    at rest). The integrity hash is over the plaintext npz bytes and
-    matches the value committed on-chain.
-    """
     w = load_weights(key)
     if w is None:
         raise HTTPException(404, f"Weights not found: {key}")
@@ -513,7 +464,6 @@ def get_weights_blob(key: str):
 
 @app.get("/hospitals")
 def list_hospitals():
-    """List available hospital partitions (triggers init if not ready)."""
     ensure_initialized()
     return {
         "hospitals": [

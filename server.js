@@ -1,4 +1,3 @@
-// Login Server - Port 3000
 
 import cors from 'cors';
 import express from 'express';
@@ -14,7 +13,6 @@ const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ─── config ─────────────────────────────────────────── */
 const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
@@ -30,7 +28,6 @@ app.get('/', (_, res) =>
   res.sendFile(path.join(__dirname, 'FE', 'login.html'))
 );
 
-// Timeout wrapper for exec commands
 async function execWithTimeout(cmd, timeout = 30000) {
   const options = { env: { ...process.env, HARDHAT_NETWORK: 'sepolia' } };
   const timeoutPromise = new Promise((_, reject) =>
@@ -39,14 +36,12 @@ async function execWithTimeout(cmd, timeout = 30000) {
   return Promise.race([execAsync(cmd, options), timeoutPromise]);
 }
 
-// Request timeout middleware
 app.use((req, res, next) => {
-  req.setTimeout(180000); // 3 minutes
+  req.setTimeout(180000);
   res.setTimeout(180000);
   next();
 });
 
-/* ─── LOGIN API (WITH ROLE VERIFICATION) ─────────────────────────────────────────── */
 app.post('/api/login', async (req, res) => {
   const startTime = Date.now();
   console.log('🔐 Login started');
@@ -69,7 +64,6 @@ app.post('/api/login', async (req, res) => {
 
     const identity = `${hospital}:${doctorId}`;
 
-    // Step 1: Generate ZK proof via FastAPI
     console.log(`🔹 Step 1: Generating ZK proof for ${role} (${identity})...`);
     const proveStartTime = Date.now();
 
@@ -92,7 +86,6 @@ app.post('/api/login', async (req, res) => {
     const proveElapsed = Date.now() - proveStartTime;
     console.log(`✅ ZK proof generated in ${proveElapsed}ms`);
 
-    // Step 2: Verify credentials AND role via zklogin
     console.log(`🔹 Step 2: Verifying credentials and role (${role})...`);
     const zkStartTime = Date.now();
 
@@ -102,7 +95,6 @@ app.post('/api/login', async (req, res) => {
     const zkElapsed = Date.now() - zkStartTime;
     console.log(`✅ Credentials verified in ${zkElapsed}ms`);
 
-    // Parse zklogin result
     let zkResult;
     try {
       const lines = stdout.split('\n').filter(Boolean);
@@ -113,7 +105,6 @@ app.post('/api/login', async (req, res) => {
       zkResult = { result: stdout };
     }
 
-    // Check if zklogin failed (role mismatch or invalid proof)
     if (zkResult.ok === false) {
       return res.status(401).json({
         error: zkResult.error || 'Login failed',
@@ -124,7 +115,6 @@ app.post('/api/login', async (req, res) => {
     const totalElapsed = Date.now() - startTime;
     console.log(`✅ Login completed in ${totalElapsed}ms`);
 
-    // Return combined result
     return res.json({
       message: 'Login successful',
       proof: proveData.proof,
@@ -148,8 +138,6 @@ app.post('/api/login', async (req, res) => {
 });
 
 
-/* ─── LEGACY ENDPOINTS (kept for backward compatibility) ─────────────────────────────────────────── */
-// Deprecated: Use /api/login instead
 app.post('/api/login/prove', async (req, res) => {
   console.warn('⚠️ /api/login/prove is deprecated. Use /api/login instead.');
   const body = { cccd: req.body.cccd, salt: req.body.salt };
@@ -172,7 +160,6 @@ app.post('/api/login/prove', async (req, res) => {
   }
 });
 
-// Deprecated: Use /api/login instead
 app.post('/api/login/zklogin', async (req, res) => {
   console.warn('⚠️ /api/login/zklogin is deprecated. Use /api/login instead.');
   const body = { cccd: req.body.cccd, salt: req.body.salt };

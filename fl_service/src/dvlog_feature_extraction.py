@@ -1,9 +1,3 @@
-"""
-Feature extraction for D-vlog dataset.
-D-vlog features are already pre-extracted (.npy), so we only need
-segment aggregation, normalization, and windowing.
-"""
-
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Optional, Tuple
@@ -18,17 +12,6 @@ def create_windows(
     stride: int,
     pad_short: bool = True,
 ) -> List[np.ndarray]:
-    """Create sliding windows from a variable-length segment array.
-
-    Args:
-        segments: (num_segments, feat_dim) or None
-        window_size: Number of consecutive segments per window
-        stride: Step size between windows
-        pad_short: If True, pad sequences shorter than window_size
-
-    Returns:
-        List of (window_size, feat_dim) arrays
-    """
     if segments is None:
         return []
 
@@ -57,7 +40,6 @@ def create_windows(
 
 
 class DVlogFeatureExtractor:
-    """Feature extractor for D-vlog pre-processed data."""
 
     def __init__(self, config: dict):
         self.segment_duration = config["preprocessing"]["segment_duration"]
@@ -66,10 +48,6 @@ class DVlogFeatureExtractor:
         self.visual_scaler = None
 
     def aggregate_to_segments(self, features: np.ndarray, fps: float = 1.0) -> np.ndarray:
-        """Aggregate frame-level features into segments (mean + std).
-
-        D-vlog is at 1Hz, so segment_duration=8 means 8 frames per segment.
-        """
         frames_per_segment = max(1, int(fps * self.segment_duration))
         num_frames = len(features)
         num_segments = max(1, num_frames // frames_per_segment)
@@ -88,7 +66,6 @@ class DVlogFeatureExtractor:
     def process_participant_segments(
         self, raw: Dict[str, Optional[np.ndarray]], normalize: bool = True
     ) -> Dict[str, Optional[np.ndarray]]:
-        """Process D-vlog participant: aggregate + normalize (no padding)."""
         audio = raw.get("acoustic")
         visual = raw.get("visual")
 
@@ -107,7 +84,6 @@ class DVlogFeatureExtractor:
         return {"audio": audio, "visual": visual, "text": None}
 
     def fit_scalers(self, all_audio: List[np.ndarray], all_visual: List[np.ndarray]):
-        """Fit scalers on training data."""
         if all_audio:
             self.audio_scaler = StandardScaler()
             stacked = np.vstack(all_audio)
@@ -131,7 +107,6 @@ def build_dvlog_windowed_dataset(
     normalize: bool = True,
     pad_short: bool = True,
 ) -> Tuple[Dict[str, List[np.ndarray]], np.ndarray, List[int]]:
-    """Build windowed dataset from D-vlog data."""
     audio_list, visual_list, text_list = [], [], []
     labels = []
     window_pids = []
@@ -148,7 +123,7 @@ def build_dvlog_windowed_dataset(
 
         if not audio_windows and visual_windows:
             n_windows = len(visual_windows)
-            adim = visual_windows[0].shape[1]  # fallback
+            adim = visual_windows[0].shape[1]
             audio_windows = [np.zeros((window_size, adim))] * n_windows
         elif audio_windows and not visual_windows:
             n_windows = len(audio_windows)
@@ -158,7 +133,7 @@ def build_dvlog_windowed_dataset(
         for i in range(n_windows):
             audio_list.append(audio_windows[i])
             visual_list.append(visual_windows[i])
-            text_list.append(np.zeros(128, dtype=np.int64))  # placeholder
+            text_list.append(np.zeros(128, dtype=np.int64))
             labels.append(label)
             window_pids.append(pid)
 

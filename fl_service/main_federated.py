@@ -1,11 +1,3 @@
-"""
-Federated Learning for Depression Detection (D-vlog only).
-Multiple clients train collaboratively on D-vlog data without sharing data.
-
-Usage:
-    python main_federated.py --config configs/federated_config.yaml
-"""
-
 import argparse
 import os
 import numpy as np
@@ -25,7 +17,6 @@ from src.visualization import save_all_plots
 
 
 def prepare_dvlog_client(config, client_cfg, shared_dim, device):
-    """Prepare D-vlog client data."""
     dataset = DVlogDataset(client_cfg["dataset_dir"])
     extractor = DVlogFeatureExtractor(config)
 
@@ -80,7 +71,6 @@ def prepare_dvlog_client(config, client_cfg, shared_dim, device):
 
 
 def evaluate_client(client: FLClient, test_loader: DataLoader, device: torch.device):
-    """Evaluate a client on its test set with optimal threshold."""
     val_probs, val_labels = _aggregate_by_participant(client.val_loader, client.model, device)
     opt_thresh, _ = find_optimal_threshold(val_probs, val_labels)
     metrics = evaluate_participant_level(client.model, test_loader, device, threshold=opt_thresh)
@@ -105,7 +95,6 @@ def main():
     wd = config["training"]["weight_decay"]
     ls = config["training"]["label_smoothing"]
 
-    # --- Prepare clients ---
     print("=" * 60)
     print("Preparing D-vlog clients...")
     print("=" * 60)
@@ -125,7 +114,6 @@ def main():
     print(f"\nTotal clients: {len(fl_clients)}")
     print(f"Total train participants: {sum(d['n_train'] for d in clients_data.values())}")
 
-    # --- Federated Training ---
     server = FLServer(fl_clients)
 
     print("\n" + "=" * 60)
@@ -146,7 +134,6 @@ def main():
             history["losses"][name].append(loss)
         history["rounds"].append(rnd)
 
-        # Evaluate every 5 rounds
         if rnd % 5 == 0 or rnd == num_rounds:
             f1s = []
             for client in fl_clients:
@@ -169,7 +156,6 @@ def main():
             print(f"No improvement for 10 rounds. Stopping at round {rnd}.")
             break
 
-    # --- Final Evaluation ---
     print("\n" + "=" * 60)
     print(f"Final Evaluation (best round: {best_round})")
     print("=" * 60)
@@ -186,7 +172,6 @@ def main():
         print(f"\n=== {client.name} Test Results (thresh={thresh:.2f}) ===")
         print_evaluation_report(metrics)
 
-    # Save plots for first client
     first_name = fl_clients[0].name
     if first_name in all_metrics:
         save_all_plots(

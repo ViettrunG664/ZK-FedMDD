@@ -1,4 +1,3 @@
-# Federated Learning (D-vlog clients)
 experiment:
   version: "v10"
   name: "Federated Learning (D-vlog)"
@@ -6,7 +5,7 @@ experiment:
 federated:
   num_rounds: 30
   local_epochs: 3
-  shared_dim: 64        # Projection target dim (shared across clients)
+  shared_dim: 64
 
 clients:
   dvlog:

@@ -1,6 +1,4 @@
-// Helper functions for loading overlay
 function showLoading(message, subtitle = '') {
-  // Remove existing loading if any
   hideLoading();
 
   const modal = document.createElement('div');
@@ -23,7 +21,6 @@ function hideLoading() {
   }
 }
 
-// Tích hợp xử lý submit form đăng nhập
 document.getElementById('loginForm').addEventListener('submit', async function (event) {
   event.preventDefault();
 
@@ -35,7 +32,6 @@ document.getElementById('loginForm').addEventListener('submit', async function (
   console.log("🔸 Salt:", salt);
   console.log("🔸 Role:", role);
 
-  // Accept composite identity: "BV.<NAME>:<8-alnum>"
   const match = raw.match(/^(BV\.[A-Z0-9]+):([A-Z0-9]{8})$/);
   if (!match) {
     alert('Username format: BV.<HOSPITAL>:<8-char-DOCTOR-ID>\nExample: BV.HOSPA:A3X7K2PQ');
@@ -44,14 +40,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
   }
   const [, hospital, doctorId] = match;
 
-  // Show loading indicator
   showLoading(
     'Authenticating...',
     'Generating zero-knowledge proof (this may take 5-10 seconds)'
   );
 
   try {
-    // Single merged API call with role
     const loginRes = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -68,10 +62,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     hideLoading();
 
-    // Success!
     alert("Login successful!");
 
-    // Redirect based on role returned from backend
     if (result.isDoctor) {
       window.location.href = `doctorpage.html?hashId=${result.hashIdHex}`;
     } else {
@@ -87,7 +79,6 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 });
 
 
-// Ẩn/hiện mật khẩu
 function togglePassword() {
   const passwordInput = document.getElementById('password');
   const eyeOpen = document.getElementById('eyeOpen');

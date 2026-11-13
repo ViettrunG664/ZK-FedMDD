@@ -1,7 +1,3 @@
-"""
-Visualization utilities for training results and evaluation metrics.
-"""
-
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,13 +7,11 @@ from typing import Dict, List
 
 
 def plot_training_history(history: Dict[str, List[float]], save_dir: str = "results"):
-    """Plot training/validation loss and F1 curves."""
     os.makedirs(save_dir, exist_ok=True)
     epochs = range(1, len(history["train_loss"]) + 1)
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Loss curve
     axes[0].plot(epochs, history["train_loss"], "b-o", label="Train Loss", markersize=3)
     axes[0].plot(epochs, history["val_loss"], "r-o", label="Val Loss", markersize=3)
     axes[0].set_xlabel("Epoch")
@@ -26,7 +20,6 @@ def plot_training_history(history: Dict[str, List[float]], save_dir: str = "resu
     axes[0].legend()
     axes[0].grid(True, alpha=0.3)
 
-    # F1 curve
     axes[1].plot(epochs, history["val_f1"], "g-o", label="Val F1", markersize=3)
     axes[1].set_xlabel("Epoch")
     axes[1].set_ylabel("F1 Score")
@@ -41,7 +34,6 @@ def plot_training_history(history: Dict[str, List[float]], save_dir: str = "resu
 
 
 def plot_confusion_matrix(labels: np.ndarray, predictions: np.ndarray, save_dir: str = "results"):
-    """Plot confusion matrix heatmap."""
     os.makedirs(save_dir, exist_ok=True)
     cm = confusion_matrix(labels, predictions)
 
@@ -63,7 +55,6 @@ def plot_confusion_matrix(labels: np.ndarray, predictions: np.ndarray, save_dir:
 
 
 def plot_roc_curve(labels: np.ndarray, probabilities: np.ndarray, save_dir: str = "results"):
-    """Plot ROC curve with AUC score."""
     os.makedirs(save_dir, exist_ok=True)
     fpr, tpr, _ = roc_curve(labels, probabilities)
     roc_auc = auc(fpr, tpr)
@@ -85,7 +76,6 @@ def plot_roc_curve(labels: np.ndarray, probabilities: np.ndarray, save_dir: str 
 
 
 def save_all_plots(history: Dict, test_metrics: Dict, save_dir: str = "results"):
-    """Generate and save all plots after training."""
     plot_training_history(history, save_dir)
     plot_confusion_matrix(test_metrics["labels"], test_metrics["predictions"], save_dir)
     roc_auc = plot_roc_curve(test_metrics["labels"], test_metrics["probabilities"], save_dir)

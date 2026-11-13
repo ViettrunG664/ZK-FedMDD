@@ -1,19 +1,3 @@
-"""
-Prover Performance Benchmark Script
-
-Measures, for the deployed hashlogin circuit (client/prove.py, submitUpdate context):
-- end-to-end proof generation latency at a facility (witness + Groth16 prove,
-  including Node/snarkjs process start-up): mean, median, std, p95, p99
-- peak resident memory of the prover process tree
-- proof size (snarkjs JSON) and on-chain calldata size (8 field elements)
-- circuit size (R1CS constraints, wires) and a final snarkjs verification
-
-Identities and salts are synthetic (BV.BENCH:<n>); no facility secret is used.
-
-Usage (system Python that runs client/prove.py):
-    python benchmarks/benchmark_prover.py --runs 50 --output metrics/prover_results.json
-"""
-
 import os
 import re
 import sys
@@ -32,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 CLIENT_DIR = BASE_DIR / "client"
 BUILD_DIR = BASE_DIR / "circuits" / "build"
 NPX = os.environ.get("NPX_PATH", "npx")
-PROVER_PYTHON = sys.executable  # overridden by --prover-python
+PROVER_PYTHON = sys.executable
 
 
 def _tree_rss(proc):
@@ -50,7 +34,6 @@ def _tree_rss(proc):
 
 
 def measure_single_run(identity: str, salt: str, task_id: int, rnd: int, payload: str):
-    """One proof generation; returns latency and peak RSS of the whole process tree."""
     cmd = [PROVER_PYTHON, str(CLIENT_DIR / "prove.py"), "--identity", identity, "--salt", salt,
            "--task-id", str(task_id), "--round", str(rnd), "--payload", payload]
     start = time.perf_counter()

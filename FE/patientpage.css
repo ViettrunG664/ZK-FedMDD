@@ -141,10 +141,10 @@ body {
   font-weight: bold;
   color: #028080;
   cursor: pointer;
-  white-space: nowrap;    /* tránh bị xuống dòng */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350px;       /* tùy chỉnh theo giao diện */
+  max-width: 350px;
   display: inline-block;
   vertical-align: middle;
 }

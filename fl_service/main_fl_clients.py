@@ -1,12 +1,3 @@
-"""
-FL on D-vlog with varying number of clients (3-6).
-Splits D-vlog train set into N equal parts, each part = 1 client.
-All clients share same feature dims, so no projection needed.
-
-Usage:
-    python main_fl_clients.py
-"""
-
 import os
 import copy
 import numpy as np
@@ -26,7 +17,6 @@ from src.evaluate import (
 
 
 def split_pids(pids, n_clients, seed=42):
-    """Split participant IDs into N roughly equal groups."""
     np.random.seed(seed)
     shuffled = np.random.permutation(pids)
     splits = np.array_split(shuffled, n_clients)
@@ -34,7 +24,6 @@ def split_pids(pids, n_clients, seed=42):
 
 
 def run_fl_dvlog(n_clients, config, device):
-    """Run FL on D-vlog with N clients."""
     dataset = DVlogDataset(config["data"]["dataset_dir"])
     extractor = DVlogFeatureExtractor(config)
 
@@ -45,7 +34,6 @@ def run_fl_dvlog(n_clients, config, device):
     valid_labels = dataset.load_labels("valid")
     test_labels = dataset.load_labels("test")
 
-    # Fit scalers on ALL train data
     raw_segs = []
     for pid in train_pids:
         raw = dataset.load_participant(pid)
@@ -59,7 +47,6 @@ def run_fl_dvlog(n_clients, config, device):
     wc = config["preprocessing"]["windowing"]
     ws, stride = wc["window_size"], wc["stride"]
 
-    # Build validation and test sets (shared across all clients)
     val_feat, val_y, val_wp = build_dvlog_windowed_dataset(
         dataset, valid_pids, valid_labels, extractor, ws, stride)
     test_feat, test_y, test_wp = build_dvlog_windowed_dataset(
@@ -70,10 +57,8 @@ def run_fl_dvlog(n_clients, config, device):
     val_loader = DataLoader(val_ds, batch_size=16, shuffle=False)
     test_loader = DataLoader(test_ds, batch_size=16, shuffle=False)
 
-    # Split train PIDs into N clients
     client_pid_splits = split_pids(train_pids, n_clients)
 
-    # Build per-client train sets
     client_loaders = []
     client_sizes = []
     for i, client_pids in enumerate(client_pid_splits):
@@ -86,19 +71,16 @@ def run_fl_dvlog(n_clients, config, device):
         client_sizes.append(len(client_pids))
         print(f"  Client {i+1}: {len(client_pids)} participants, {len(ds)} windows")
 
-    # Get dims
     audio_dim = val_ds[0]["audio"].shape[-1]
     visual_dim = val_ds[0]["visual"].shape[-1]
 
     mc = config["model"]
-    # Create global model
     global_model = MultimodalBiLSTM(
         audio_input_dim=audio_dim, visual_input_dim=visual_dim,
         hidden_dim=mc["hidden_dim"], num_layers=mc["num_layers"],
         dropout=mc["dropout"], fusion=mc["fusion"],
     ).to(device)
 
-    # FL training
     num_rounds = 30
     local_epochs = 3
     lr = 0.0005
@@ -112,7 +94,6 @@ def run_fl_dvlog(n_clients, config, device):
         client_states = []
 
         for i, loader in enumerate(client_loaders):
-            # Load global weights
             local_model = MultimodalBiLSTM(
                 audio_input_dim=audio_dim, visual_input_dim=visual_dim,
                 hidden_dim=mc["hidden_dim"], num_layers=mc["num_layers"],
@@ -120,7 +101,6 @@ def run_fl_dvlog(n_clients, config, device):
             ).to(device)
             local_model.load_state_dict(global_state)
 
-            # Local training
             optimizer = torch.optim.Adam(local_model.parameters(), lr=lr, weight_decay=0.001)
             all_labels = torch.cat([b["label"] for b in loader]).squeeze()
             num_pos = all_labels.sum().item()
@@ -134,7 +114,7 @@ def run_fl_dvlog(n_clients, config, device):
                     audio = batch["audio"].to(device) + torch.randn(batch["audio"].shape).to(device) * 0.05
                     visual = batch["visual"].to(device) + torch.randn(batch["visual"].shape).to(device) * 0.05
                     labels = batch["label"].to(device)
-                    labels = labels * 0.95 + 0.025  # label smoothing
+                    labels = labels * 0.95 + 0.025
 
                     optimizer.zero_grad()
                     logits = local_model(audio, visual)
@@ -145,7 +125,6 @@ def run_fl_dvlog(n_clients, config, device):
 
             client_states.append(local_model.state_dict())
 
-        # FedAvg
         avg_state = OrderedDict()
         for key in global_state.keys():
             avg_state[key] = sum(
@@ -154,7 +133,6 @@ def run_fl_dvlog(n_clients, config, device):
             )
         global_model.load_state_dict(avg_state)
 
-        # Evaluate every 5 rounds
         if rnd % 5 == 0 or rnd == num_rounds:
             probs, labels = _aggregate_by_participant(val_loader, global_model, device)
             thresh, f1 = find_optimal_threshold(probs, labels)
@@ -168,7 +146,6 @@ def run_fl_dvlog(n_clients, config, device):
             print(f"  Early stopping at round {rnd}")
             break
 
-    # Final eval
     global_model.load_state_dict(best_state)
     probs, labels = _aggregate_by_participant(val_loader, global_model, device)
     opt_thresh, _ = find_optimal_threshold(probs, labels)
@@ -197,7 +174,6 @@ def main():
               f"Precision={metrics['precision']:.4f} Acc={metrics['accuracy']:.4f} (thresh={thresh:.2f}) ---")
         print_evaluation_report(metrics)
 
-    # Summary
     print(f"\n{'='*60}")
     print("SUMMARY: FL on D-vlog with varying clients")
     print(f"{'='*60}")
@@ -207,7 +183,6 @@ def main():
         m = results[n]
         print(f"{n:>8} {m['f1']:>8.4f} {m['recall']:>8.4f} {m['precision']:>10.4f} {m['accuracy']:>10.4f}")
 
-    # Save to Excel
     import pandas as pd
     from sklearn.metrics import confusion_matrix
     excel_path = "results/experiment_results.xlsx"

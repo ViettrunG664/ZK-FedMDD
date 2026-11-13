@@ -1,7 +1,3 @@
-// Measure zkLogin() Gas Using estimateGas()
-// This doesn't create real transactions, so it's FREE
-//
-// Usage: npx hardhat run benchmarks/estimate_zklogin_gas.js --network sepolia
 
 import fs from 'fs';
 import pkg from 'hardhat';
@@ -10,11 +6,9 @@ const { ethers } = pkg;
 async function estimateZkLoginGas() {
   console.log('Estimating zkLogin() Gas on Sepolia...\n');
 
-  // Get contract
   const iaAddr = fs.readFileSync('contract_address.txt', 'utf8').trim();
   const ia = await ethers.getContractAt('IdentityAccess', iaAddr);
 
-  // Load proof files
   const proof = JSON.parse(fs.readFileSync('client/proof.json', 'utf8'));
   const pub = JSON.parse(fs.readFileSync('client/public.json', 'utf8'));
 
@@ -22,7 +16,6 @@ async function estimateZkLoginGas() {
   console.log('Proof loaded from client/proof.json');
   console.log('Public inputs loaded from client/public.json\n');
 
-  // Estimate gas for zkLogin
   console.log('Running estimateGas()...\n');
 
   try {
@@ -38,7 +31,6 @@ async function estimateZkLoginGas() {
 
     const gasNum = Number(gasEstimate);
 
-    // Calculate costs at different gas prices
     const gasPrices = [
       { name: '1 gwei (Sepolia low)', gwei: 1 },
       { name: '5 gwei (Sepolia normal)', gwei: 5 },
@@ -63,7 +55,6 @@ async function estimateZkLoginGas() {
       console.log(`${gp.name.padEnd(30)} ${costEth.padStart(18)} ETH  $${costUsd.toFixed(2)}`);
     }
 
-    // Save results
     const results = {
       timestamp: new Date().toISOString(),
       network: 'sepolia',

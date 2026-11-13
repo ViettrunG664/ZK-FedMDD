@@ -1,10 +1,3 @@
-"""
-Entry point for D-vlog standalone experiment (V6).
-
-Usage:
-    python main_dvlog.py --config configs/dvlog_config.yaml
-"""
-
 import argparse
 import os
 import numpy as np
@@ -25,7 +18,6 @@ from src.visualization import save_all_plots
 
 
 def run_v6(config):
-    """Train and evaluate on D-vlog dataset only."""
     device = get_device(config["device"])
     print(f"Using device: {device}")
 
@@ -39,7 +31,6 @@ def run_v6(config):
     valid_labels = dataset.load_labels("valid")
     test_labels = dataset.load_labels("test")
 
-    # Fit scalers
     print("Fitting scalers on D-vlog training data...")
     raw_segments = []
     for pid in train_pids:
@@ -96,7 +87,6 @@ def run_v6(config):
     print("\n=== V6: Training on D-vlog ===")
     history = train(model, train_loader, valid_loader, config, device, save_dir=save_dir)
 
-    # Evaluate
     model.load_state_dict(torch.load(f"{save_dir}/best_model.pt", map_location=device, weights_only=True))
     valid_probs, valid_labels_arr = _aggregate_by_participant(valid_loader, model, device)
     opt_thresh, opt_f1 = find_optimal_threshold(valid_probs, valid_labels_arr)

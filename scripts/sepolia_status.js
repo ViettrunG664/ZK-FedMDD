@@ -1,6 +1,3 @@
-// Print the relayer address, its balance, gas price and the latest block.
-// The latest block hash doubles as the public beacon for the phase-2 setup.
-// Usage: npx hardhat run scripts/sepolia_status.js --network sepolia
 import pkg from "hardhat";
 const { ethers } = pkg;
 

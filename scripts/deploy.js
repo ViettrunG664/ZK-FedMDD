@@ -1,14 +1,8 @@
-// scripts/deploy.js
-// Deploy Groth16Verifier + IdentityAccess + FederatedLearning, save the
-// addresses and the deployment receipts (metrics/deployment_<network>.json).
-// Usage: npx hardhat run scripts/deploy.js --network sepolia
-// The deployer becomes the IdentityAccess registrar (admin).
 
 import fs from "fs";
 import pkg from "hardhat";
 const { ethers, network } = pkg;
 
-// Low priority fee (TIP_GWEI, default 0.1); the ethers default tip is ~1 gwei.
 async function fees() {
   if (network.name === "hardhat") return {};
   const tip = ethers.parseUnits(process.env.TIP_GWEI || "0.1", "gwei");

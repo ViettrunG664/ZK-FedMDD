@@ -1,7 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
-/* ---------- task tuỳ chỉnh ---------- */
 task(
   "balance", 
   "Print an account's Sepolia balance",
@@ -11,7 +10,7 @@ task(
 
     if (!addr) {
       console.error(
-        " Thiếu địa chỉ. Dùng: npx hardhat balance --account <ADDR> --network sepolia"
+        "Missing address. Usage: npx hardhat balance --account <ADDR> --network sepolia"
       );
       return;
     }
@@ -24,10 +23,9 @@ task(
     );
   }
 )
-  .addParam("account", "The account address to query", undefined, types.string, false) // --account
-  .addOptionalParam("addr", "Alias for --account")                                     // --addr
-  .addOptionalParam("a", "Alias for --account");                                       // -a
-// ----------------------------------------------
+  .addParam("account", "The account address to query", undefined, types.string, false)
+  .addOptionalParam("addr", "Alias for --account")
+  .addOptionalParam("a", "Alias for --account");
 task("block-number", "Prints the current block number", async (_, hre) => {
   const block = await hre.ethers.provider.getBlockNumber();
   console.log("Current block number:", block);
@@ -35,7 +33,6 @@ task("block-number", "Prints the current block number", async (_, hre) => {
 
 const acc = process.env.SEPOLIA_PRIVATE_KEY ? [process.env.SEPOLIA_PRIVATE_KEY] : [];
 
-/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.28",
 

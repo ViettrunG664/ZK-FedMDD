@@ -1,22 +1,3 @@
-"""
-Benchmark ALL experiments and export to Excel.
-
-Experiments:
-  1. BiLSTM (standalone)
-  2. BiLSTM + FL (2, 3, 4, 5, 6 clients)
-  3. BiLSTM + FL + CL (EWC + Replay)
-
-Metrics per experiment:
-  - Accuracy, F1, Precision, Recall
-  - Training Time (s), Training Energy (J), Training Memory (MB)
-  - Inference Time (s), Inference Energy (J)
-  - Model Parameters
-
-Usage:
-    cd fl_service
-    python benchmark_all.py
-"""
-
 import os
 import sys
 import time
@@ -44,10 +25,8 @@ from src.evaluate import (
 from src.continual import EWC, ReplayBuffer, train_with_ewc
 
 
-# ─── GPU Energy Measurement ───
 
 class GPUEnergyTracker:
-    """Track GPU energy consumption using pynvml."""
 
     def __init__(self):
         self.supported = False
@@ -64,19 +43,17 @@ class GPUEnergyTracker:
         if not self.supported:
             return 0
         try:
-            return self.pynvml.nvmlDeviceGetPowerUsage(self.handle)  # milliwatts
+            return self.pynvml.nvmlDeviceGetPowerUsage(self.handle)
         except Exception:
             return 0
 
     def measure_energy(self, func, *args, **kwargs):
-        """Run func and measure total energy in Joules."""
         if not self.supported:
             start = time.time()
             result = func(*args, **kwargs)
             elapsed = time.time() - start
-            return result, elapsed, 0.0  # no energy data
+            return result, elapsed, 0.0
 
-        # Sample power every 0.1s during execution
         import threading
         power_samples = []
         stop_event = threading.Event()
@@ -98,7 +75,6 @@ class GPUEnergyTracker:
         stop_event.set()
         sampler.join(timeout=1)
 
-        # Energy = avg_power * time (convert mW to W)
         if power_samples:
             avg_power_w = np.mean(power_samples) / 1000.0
             energy_j = avg_power_w * elapsed
@@ -108,7 +84,6 @@ class GPUEnergyTracker:
         return result, elapsed, energy_j
 
 
-# ─── Hardware Info ───
 
 def get_hardware_info():
     info = {
@@ -127,16 +102,8 @@ def get_hardware_info():
     return info
 
 
-# ─── Data Preparation (shared) ───
 
 def prepare_all_data(config):
-    """Prepare D-vlog data once, return everything needed.
-
-    Segment descriptors are cached unnormalized so that every simulated
-    facility can fit its own scalers (SiteNormalizer, Section 3.5). The
-    datasets returned here use one scaler fitted on all training participants
-    and serve the centralized baseline only.
-    """
     dataset = DVlogDataset(config["data"]["dataset_dir"])
     extractor = DVlogFeatureExtractor(config)
 
@@ -175,7 +142,6 @@ def prepare_all_data(config):
     return data
 
 
-# ─── Per-facility normalization and evaluation ───
 
 def _fit_scaler(arrays):
     arrays = [a for a in arrays if a is not None]
@@ -183,7 +149,6 @@ def _fit_scaler(arrays):
 
 
 def _apply_shift(seg, gain, offset):
-    """Device shift x -> gain*x + offset on frames, expressed on [mean | std] segments."""
     d = seg.shape[1] // 2
     out = seg.copy()
     out[:, :d] = seg[:, :d] * gain + offset
@@ -192,12 +157,6 @@ def _apply_shift(seg, gain, offset):
 
 
 class SiteNormalizer:
-    """z-score scalers fitted on one facility's training participants only.
-
-    Reads the cached, unnormalized segment descriptors and stands in for both
-    the dataset and the extractor argument of build_dvlog_windowed_dataset.
-    `shift` maps modality -> (gain, offset): a facility-specific recording device.
-    """
 
     def __init__(self, segs, fit_pids, shift=None):
         self.segs, self.shift = segs, shift
@@ -231,7 +190,6 @@ def site_dataset(data, norm, pids):
 
 
 def device_shifts(data, n_sites, sigma, seed):
-    """Per-facility gain exp(N(0, sigma)) and offset N(0, sigma) x pooled feature std."""
     rng = np.random.default_rng(seed + 1000)
     ref = data["global_norm"]
     shifts = []
@@ -248,7 +206,6 @@ METRIC_KEYS = ("accuracy", "f1", "precision", "recall", "specificity", "auc")
 
 
 def evaluate_sites(model, sites, device):
-    """Each facility picks its threshold on its own validation copy and scores its own test copy."""
     per_site = []
     for site in sites:
         probs, labels = _aggregate_by_participant(site["val"], model, device)
@@ -267,7 +224,6 @@ def evaluate_sites(model, sites, device):
 
 
 def site_round_scores(model, site, device):
-    """Validation F1/accuracy/AUC and training-shard accuracy at the validation threshold."""
     probs, labels = _aggregate_by_participant(site["val"], model, device)
     thresh, f1 = find_optimal_threshold(probs, labels)
     tr_probs, tr_labels = _aggregate_by_participant(site["train_eval"], model, device)
@@ -280,7 +236,6 @@ def site_round_scores(model, site, device):
 
 
 def _result(name, params, per_site, extra):
-    """Mean over facilities of the per-facility test metrics, plus the per-facility results."""
     mean = {k: float(np.mean([s[k] for s in per_site])) for k in METRIC_KEYS}
     return {
         "Experiment": name, "Parameters": params,
@@ -302,7 +257,6 @@ def create_model(config, audio_dim, visual_dim, device):
 
 
 def measure_inference(model, test_loader, device, tracker, threshold=0.5):
-    """Measure inference time and energy on test set."""
     model.eval()
 
     def run_inference():
@@ -314,12 +268,10 @@ def measure_inference(model, test_loader, device, tracker, threshold=0.5):
 
     _, inf_time, inf_energy = tracker.measure_energy(run_inference)
 
-    # Also get metrics
     metrics = evaluate_participant_level(model, test_loader, device, threshold=threshold)
     return metrics, inf_time, inf_energy
 
 
-# ─── Experiment 1: BiLSTM Standalone ───
 
 def run_bilstm_standalone(config, data, device, tracker):
     print("\n" + "=" * 60)
@@ -346,7 +298,6 @@ def run_bilstm_standalone(config, data, device, tracker):
 
     train_mem = torch.cuda.max_memory_allocated() / 1024**2 if torch.cuda.is_available() else 0
 
-    # Load best model
     best_path = "checkpoints/benchmark_standalone/best_model.pt"
     if os.path.exists(best_path):
         model.load_state_dict(torch.load(best_path, map_location=device, weights_only=True))
@@ -364,15 +315,8 @@ def run_bilstm_standalone(config, data, device, tracker):
     })
 
 
-# ─── Experiment 2: BiLSTM + FL (N clients) ───
 
 def build_sites(data, client_pid_splits, bs, device, shifts=None, norm="local"):
-    """One simulated facility per shard: its own scalers, data loaders and class weight.
-
-    Every facility normalizes its own training shard and its own copy of the
-    shared validation/test participants with its own scalers (norm="local"),
-    or all facilities use one scaler fitted on the pooled training data (norm="global").
-    """
     shifts = shifts or [None] * len(client_pid_splits)
     norms = [SiteNormalizer(data["segs"], pids, shift) for pids, shift in zip(client_pid_splits, shifts)]
     if norm == "global":
@@ -391,7 +335,6 @@ def build_sites(data, client_pid_splits, bs, device, shifts=None, norm="local"):
             "train_eval": DataLoader(ds, batch_size=bs, shuffle=False),
             "val": DataLoader(site_dataset(data, nz, data["val_pids"]), batch_size=bs, shuffle=False),
             "test": DataLoader(site_dataset(data, nz, data["test_pids"]), batch_size=bs, shuffle=False),
-            # clamped so that single-class shards (label skew) keep a bounded class weight
             "pos_weight": torch.tensor([float(np.clip((len(ds) - num_pos) / max(num_pos, 1.0), 0.2, 10.0))]).to(device),
             "size": len(client_pids),
         })
@@ -401,14 +344,6 @@ def build_sites(data, client_pid_splits, bs, device, shifts=None, norm="local"):
 
 def run_fl_n_clients(n_clients, config, data, device, tracker, seed=None, mu=0.0,
                      partition="iid", alpha=0.5, norm="local", shift_sigma=0.0, rounds=30):
-    """FedAvg (mu = 0) or FedProx (mu > 0) across n_clients simulated facilities.
-
-    partition: "iid" random shards, or "dirichlet" label skew with `alpha`.
-    norm: "local" = every facility fits its own scalers (Section 3.5);
-          "global" = one scaler fitted on the pooled training data (reference for the shift study).
-    shift_sigma > 0 gives every facility its own simulated recording device.
-    The shard assignment follows `seed`.
-    """
     seed = config.get("seed", 42) if seed is None else seed
     algo = f"FedProx mu={mu}" if mu > 0 else "FedAvg"
     print(f"\n{'=' * 60}")
@@ -466,7 +401,7 @@ def run_fl_n_clients(n_clients, config, data, device, tracker, seed=None, mu=0.0
                         logits = local_model(audio, visual)
                         loss = criterion(logits, labels)
                         loss_sum, loss_n = loss_sum + loss.item() * len(labels), loss_n + len(labels)
-                        if mu > 0:  # FedProx proximal term
+                        if mu > 0:
                             prox = sum(((p - g) ** 2).sum()
                                        for p, g in zip(local_model.parameters(), global_params))
                             loss = loss + 0.5 * mu * prox
@@ -476,7 +411,6 @@ def run_fl_n_clients(n_clients, config, data, device, tracker, seed=None, mu=0.0
 
                 client_states.append(local_model.state_dict())
 
-            # FedAvg
             avg_state = OrderedDict()
             for key in global_state.keys():
                 avg_state[key] = sum(
@@ -485,7 +419,6 @@ def run_fl_n_clients(n_clients, config, data, device, tracker, seed=None, mu=0.0
                 )
             global_model.load_state_dict(avg_state)
 
-            # Validate every round: model selection and learning curves
             scores = [site_round_scores(global_model, site, device) for site in sites]
             val_f1 = float(np.mean([s["val_f1"] for s in scores]))
             history.append({"round": rnd, "train_loss": loss_sum / loss_n, "val_f1": val_f1, "sites": scores})
@@ -519,7 +452,6 @@ def run_fl_n_clients(n_clients, config, data, device, tracker, seed=None, mu=0.0
     })
 
 
-# ─── Experiment 3: BiLSTM + FL + CL ───
 
 def run_fl_cl(config, data, device, tracker, seed=None):
     seed = config.get("seed", 42) if seed is None else seed
@@ -531,13 +463,11 @@ def run_fl_cl(config, data, device, tracker, seed=None):
     cc = cl_config["continual"]
     bs = 16
 
-    # Split train into 2 tasks
     np.random.seed(seed)
     shuffled = np.random.permutation(data["train_pids"])
     mid = len(shuffled) // 2
     task1_pids, task2_pids = shuffled[:mid].tolist(), shuffled[mid:].tolist()
 
-    # Each task is a facility with its own scalers (Section 3.5)
     tasks = []
     for pids in (task1_pids, task2_pids):
         nz = SiteNormalizer(data["segs"], pids)
@@ -558,22 +488,18 @@ def run_fl_cl(config, data, device, tracker, seed=None):
     torch.cuda.reset_peak_memory_stats() if torch.cuda.is_available() else None
 
     def do_fl_cl_training():
-        # Task 1
         print("  Task 1: Training...")
         train_with_ewc(model, t1["train"], t1["val"], device,
                         num_epochs=30, lr=0.0005, weight_decay=0.001,
                         patience=15, label_smoothing=0.05)
 
-        # EWC
         print("  Computing Fisher Information Matrix...")
         ewc = EWC(model, t1["train"], device, exclude_prefixes=())
 
-        # Replay buffer
         print(f"  Creating replay buffer ({cc['replay_buffer_size']} samples)...")
         buffer = ReplayBuffer(t1["ds"], buffer_size=cc["replay_buffer_size"])
         replay_loader = buffer.get_loader(batch_size=bs)
 
-        # Task 2 with EWC + Replay
         print("  Task 2: Training with EWC + Replay...")
         train_with_ewc(model, t2["train"], t2["val"], device,
                         ewc=ewc, ewc_lambda=cc["ewc_lambda"],
@@ -596,7 +522,6 @@ def run_fl_cl(config, data, device, tracker, seed=None):
     })
 
 
-# ─── Main ───
 
 def main():
     print("=" * 60)
@@ -615,32 +540,27 @@ def main():
     for k, v in hw_info.items():
         print(f"  {k}: {v}")
 
-    # Prepare data once
     print("\n--- Preparing data ---")
     data = prepare_all_data(config)
 
     all_results = []
 
-    # 1. BiLSTM standalone
     set_seed(config.get("seed", 42))
     result = run_bilstm_standalone(config, data, device, tracker)
     all_results.append(result)
     print(f"  -> F1={result['F1-Score']:.4f}, Time={result['Training Time (s)']}s")
 
-    # 2. FL with 2, 3, 4, 5, 6 clients
     for n in [2, 3, 4, 5, 6]:
         set_seed(config.get("seed", 42))
         result = run_fl_n_clients(n, config, data, device, tracker)
         all_results.append(result)
         print(f"  -> F1={result['F1-Score']:.4f}, Time={result['Training Time (s)']}s")
 
-    # 3. FL + CL
     set_seed(config.get("seed", 42))
     result = run_fl_cl(config, data, device, tracker)
     all_results.append(result)
     print(f"  -> F1={result['F1-Score']:.4f}, Time={result['Training Time (s)']}s")
 
-    # ─── Export to Excel (3 sheets, formatted) ───
     import pandas as pd
     from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
     from openpyxl.utils import get_column_letter
@@ -650,16 +570,13 @@ def main():
 
     df = pd.DataFrame(all_results)
 
-    # Sheet 1: Model Performance
     perf_df = df[["Experiment", "Parameters", "Accuracy", "F1-Score", "Precision", "Recall"]].copy()
     for col in ["Accuracy", "F1-Score", "Precision", "Recall"]:
         perf_df[col] = perf_df[col].round(4)
 
-    # Sheet 2: Resource Usage
     resource_df = df[["Experiment", "Training Time (s)", "Training Energy (J)",
                        "Training Memory (MB)", "Inference Time (s)", "Inference Energy (J)"]].copy()
 
-    # Sheet 3: Hardware Info
     hw_df = pd.DataFrame(list(hw_info.items()), columns=["Property", "Value"])
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
@@ -669,7 +586,6 @@ def main():
 
         wb = writer.book
 
-        # ─── Styling ───
         header_font = Font(bold=True, size=12, color="FFFFFF")
         header_fill = PatternFill(start_color="2F5496", end_color="2F5496", fill_type="solid")
         title_font = Font(bold=True, size=14, color="1F3864")
@@ -690,12 +606,10 @@ def main():
         ]:
             ws = wb[sheet_name]
 
-            # Title row
             ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(df_sheet.columns))
             ws.cell(row=1, column=1, value=title).font = title_font
             ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
 
-            # Header row (row 2)
             for col_idx in range(1, len(df_sheet.columns) + 1):
                 cell = ws.cell(row=2, column=col_idx)
                 cell.font = header_font
@@ -703,19 +617,15 @@ def main():
                 cell.alignment = center
                 cell.border = border
 
-            # Data rows
             for row_idx in range(3, len(df_sheet) + 3):
                 for col_idx in range(1, len(df_sheet.columns) + 1):
                     cell = ws.cell(row=row_idx, column=col_idx)
                     cell.font = data_font
                     cell.border = border
-                    # First column left-aligned, rest centered
                     cell.alignment = left_align if col_idx == 1 else center
-                    # Alternating row colors
                     if (row_idx - 3) % 2 == 1:
                         cell.fill = alt_fill
 
-            # Auto-fit column widths
             for col_idx in range(1, len(df_sheet.columns) + 1):
                 col_letter = get_column_letter(col_idx)
                 max_len = max(
@@ -725,7 +635,6 @@ def main():
                 )
                 ws.column_dimensions[col_letter].width = max(max_len + 4, 15)
 
-            # Freeze header
             ws.freeze_panes = "A3"
 
     print(f"\n{'=' * 60}")

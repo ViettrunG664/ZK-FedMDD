@@ -1,4 +1,3 @@
-/* Loading Overlay Styles */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -53,7 +52,6 @@
   font-weight: normal;
 }
 
-/* Pulse animation for text */
 .loading-overlay p {
   animation: pulse 2s ease-in-out infinite;
 }

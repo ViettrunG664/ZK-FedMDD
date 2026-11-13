@@ -1,12 +1,3 @@
-"""
-Learning-curve figure for the revised Section 7 (JISAS-D-26-04548):
-(a) mean validation F1 per FedAvg round, +-1 std over ten seeds, K = 2..6;
-(b) mean local training loss per round.
-Markers: the mean selected (best-validation) round of each K.
-
-Run from fl_service/ after analyze_r1.py:
-    python paper_fig_curves_r1.py --out <path>/fig_learning_curves.pdf
-"""
 import os
 import csv
 import json
@@ -21,7 +12,6 @@ import matplotlib.pyplot as plt
 HERE = os.path.dirname(os.path.abspath(__file__))
 os.chdir(HERE)
 
-# Ordinal single-hue ramp (light -> dark with K), validated for a light surface.
 COLORS = {2: "#86b6ef", 3: "#5598e7", 4: "#2a78d6", 5: "#1c5cab", 6: "#104281"}
 INK, MUTED, GRID = "#2b2b29", "#6b6a66", "#e4e3df"
 MAX_ROUND = 20

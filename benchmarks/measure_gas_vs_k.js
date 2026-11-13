@@ -1,16 +1,3 @@
-// Gas as a function of the number of facilities K, from transaction receipts.
-//
-// Registers 6 benchmark facilities, then for each K = 2..6 runs one task:
-//   createTask, (K-1) × joinTask, ROUNDS × [startRound, K × submitUpdate, submitAggregation]
-// Every submitUpdate carries a fresh Groth16 proof bound to (taskId, round, weightsHash).
-// Facility secrets are random and kept in memory only. Weight CIDs have the
-// production length (59-char CIDv1, as returned by Lighthouse).
-//
-// Usage:
-//   npx hardhat run benchmarks/measure_gas_vs_k.js                      (in-process, deploys)
-//   npx hardhat run benchmarks/measure_gas_vs_k.js --network sepolia    (uses *_address.txt)
-// Env: ROUNDS (default 2), TIP_GWEI (default 0.1, Sepolia only)
-// Output: metrics/gas_vs_k_<network>.json
 
 import fs from "fs";
 import crypto from "crypto";
@@ -126,7 +113,7 @@ async function main() {
       startRound: stats(pick("startRound", K)),
       submitUpdate: stats(pick("submitUpdate", K)),
       submitAggregation: stats(pick("submitAggregation", K)),
-      perRound: stats(rounds),   // startRound + K × submitUpdate + submitAggregation
+      perRound: stats(rounds),
       setup: pick("createTask", K)[0] + pick("joinTask", K).reduce((a, b) => a + b, 0),
     };
   }
@@ -136,8 +123,6 @@ async function main() {
   fs.mkdirSync("metrics", { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify({
     network: network.name,
-    // Sepolia repriced state creation on 2026-10-06 (benchmarks/check_gas_schedule.js);
-    // the in-process network keeps the earlier schedule of this hardfork.
     hardfork: network.config.hardfork ?? null,
     date: new Date().toISOString(),
     relayer: relayer.address,
@@ -158,7 +143,7 @@ async function main() {
     console.log(` ${K} | ${p.submitUpdate.mean} | ${p.submitAggregation.mean} | ${p.perRound.mean}`);
   }
   console.log(`\nSpent ${ethers.formatEther(balance0 - balance1)} ETH → ${OUT}`);
-  process.exit(0);   // snarkjs leaves curve worker threads alive
+  process.exit(0);
 }
 
 main().catch((err) => {

@@ -1,30 +1,27 @@
 
 services:
-  # ---------- IPFS node (Kubo) ----------
   ipfs:
     image: ipfs/kubo:latest
     container_name: ipfs
     environment:
       IPFS_PROFILE: server         
     ports:                          
-      - "127.0.0.1:4001:4001"       # Swarm
-      - "127.0.0.1:5001:5001"       # API
-      - "127.0.0.1:8080:8080"       # Gateway
+      - "127.0.0.1:4001:4001"
+      - "127.0.0.1:5001:5001"
+      - "127.0.0.1:8080:8080"
     volumes:
-      - ./ipfs-data:/data/ipfs      # repo IPFS
+      - ./ipfs-data:/data/ipfs
       - ./ipfs-export:/export       
     restart: unless-stopped
 
-  # ---------- Lotus node (Calibnet) ----------
   lotus:
-    # command: sleep infinity
     image: filecoin/lotus-all-in-one:nightly-calibnet
     container_name: lotus
     env_file: .env   
     command: lotus daemon
     ports:
-      - "1234:1234"                 # Lotus API
-      - "1235:1235"                 # Lotus Gateway (RPC)
+      - "1234:1234"
+      - "1235:1235"
     volumes:
        - ./lotus-data:/home/lotus_user   
     restart: unless-stopped
@@ -33,11 +30,10 @@ services:
     container_name: boost
     depends_on: [lotus]
     environment:
-      # Cho Boost biết API full-node 
       FULLNODE_API_INFO: ${LOTUS_API_TOKEN}:/dns4/lotus/tcp/1234/ws  
     ports:
-      - "127.0.0.1:8081:8080"        # Web UI
-      - "24001:24001/tcp"            # libp2p
+      - "127.0.0.1:8081:8080"
+      - "24001:24001/tcp"
     volumes:
       - ./boost-data:/var/lib/boost
     stdin_open: true

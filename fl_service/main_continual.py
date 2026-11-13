@@ -1,19 +1,3 @@
-"""
-Continual Learning for Depression Detection (D-vlog only).
-Train sequentially on two disjoint subsets of D-vlog training data.
-
-Task 1: First half of D-vlog train participants
-Task 2: Second half of D-vlog train participants
-Validate/Test: Shared valid and test sets
-
-V11a: Naive Sequential (no protection -> catastrophic forgetting)
-V11b: EWC (Elastic Weight Consolidation -> prevent forgetting)
-V11c: EWC + Replay Buffer (strongest protection)
-
-Usage:
-    python main_continual.py --config configs/continual_config.yaml
-"""
-
 import argparse
 import os
 import copy
@@ -34,7 +18,6 @@ from src.evaluate import (
 
 
 def split_train_pids(pids, seed=42):
-    """Split training PIDs into two roughly equal halves."""
     np.random.seed(seed)
     shuffled = np.random.permutation(pids)
     mid = len(shuffled) // 2
@@ -42,7 +25,6 @@ def split_train_pids(pids, seed=42):
 
 
 def prepare_dvlog_data(config):
-    """Prepare D-vlog data: split train into Task1/Task2, shared valid/test."""
     dataset = DVlogDataset(config["data"]["dataset_dir"])
     extractor = DVlogFeatureExtractor(config)
 
@@ -50,14 +32,12 @@ def prepare_dvlog_data(config):
     valid_pids = dataset.get_participant_ids("valid")
     test_pids = dataset.get_participant_ids("test")
 
-    # Split train into two halves
     task1_pids, task2_pids = split_train_pids(all_train_pids, seed=config["seed"])
     print(f"Task 1: {len(task1_pids)} participants")
     print(f"Task 2: {len(task2_pids)} participants")
     print(f"Valid:  {len(valid_pids)} participants")
     print(f"Test:   {len(test_pids)} participants")
 
-    # Fit scalers on ALL train data (both tasks)
     print("Fitting scalers on all D-vlog training data...")
     raw_segs = []
     for pid in all_train_pids:
@@ -74,7 +54,6 @@ def prepare_dvlog_data(config):
 
     all_labels = dataset.load_labels()
 
-    # Build windowed datasets
     print("Building Task 1 windows...")
     t1_feat, t1_y, t1_wp = build_dvlog_windowed_dataset(
         dataset, task1_pids, all_labels, extractor, ws, stride)
@@ -104,7 +83,6 @@ def prepare_dvlog_data(config):
 
 
 def evaluate_model(model, val_loader, test_loader, device, label=""):
-    """Evaluate model with optimal threshold from validation set."""
     probs, labels = _aggregate_by_participant(val_loader, model, device)
     thresh, val_f1 = find_optimal_threshold(probs, labels)
     metrics = evaluate_participant_level(model, test_loader, device, threshold=thresh)
@@ -114,19 +92,12 @@ def evaluate_model(model, val_loader, test_loader, device, label=""):
 
 
 def run_continual(config, mode: str):
-    """
-    Run continual learning experiment on D-vlog only.
-
-    Args:
-        mode: "naive" (V11a), "ewc" (V11b), or "ewc_replay" (V11c)
-    """
     device = get_device(config["device"])
     mc = config["model"]
     tc = config["training"]
     cc = config["continual"]
     bs = tc["batch_size"]
 
-    # --- Prepare data ---
     t1_ds, t2_ds, val_ds, test_ds, audio_dim, visual_dim = prepare_dvlog_data(config)
 
     t1_train_loader = DataLoader(t1_ds, batch_size=bs, shuffle=True)
@@ -134,7 +105,6 @@ def run_continual(config, mode: str):
     val_loader = DataLoader(val_ds, batch_size=bs, shuffle=False)
     test_loader = DataLoader(test_ds, batch_size=bs, shuffle=False)
 
-    # --- Create model (same dims for both tasks, no projection needed) ---
     model = MultimodalBiLSTM(
         audio_input_dim=audio_dim, visual_input_dim=visual_dim,
         hidden_dim=mc["hidden_dim"], num_layers=mc["num_layers"],
@@ -142,7 +112,6 @@ def run_continual(config, mode: str):
     ).to(device)
     print(f"Model params: {sum(p.numel() for p in model.parameters()):,}")
 
-    # ========== TASK 1: Train on first half ==========
     print(f"\n{'='*60}")
     print(f"TASK 1: Training on D-vlog subset 1 ({mode})")
     print(f"{'='*60}")
@@ -154,25 +123,20 @@ def run_continual(config, mode: str):
         label_smoothing=tc["label_smoothing"],
     )
 
-    # Evaluate after Task 1
     print("\n--- After Task 1 ---")
     t1_metrics, t1_thresh = evaluate_model(model, val_loader, test_loader, device, "Test")
 
-    # ========== Prepare for Task 2 ==========
-    # Compute EWC if needed
     ewc = None
     if mode in ("ewc", "ewc_replay"):
         print("\nComputing Fisher Information Matrix (EWC)...")
         ewc = EWC(model, t1_train_loader, device, exclude_prefixes=())
 
-    # Replay buffer from Task 1
     replay_loader = None
     if mode == "ewc_replay":
         print(f"Creating replay buffer from Task 1 ({cc['replay_buffer_size']} samples)...")
         buffer = ReplayBuffer(t1_ds, buffer_size=cc["replay_buffer_size"])
         replay_loader = buffer.get_loader(batch_size=bs)
 
-    # ========== TASK 2: Continue on second half ==========
     print(f"\n{'='*60}")
     print(f"TASK 2: Continue training on D-vlog subset 2 ({mode})")
     if ewc:
@@ -190,7 +154,6 @@ def run_continual(config, mode: str):
         label_smoothing=tc["label_smoothing"],
     )
 
-    # Evaluate after Task 2
     print("\n--- After Task 2 ---")
     t2_metrics, t2_thresh = evaluate_model(model, val_loader, test_loader, device, "Test")
 
@@ -233,7 +196,6 @@ def main():
         print(f"  Test after Task 2: F1={t2_f1:.4f}  "
               f"({'FORGOT' if t2_f1 < t1_f1 - 0.05 else 'OK'})")
 
-    # Final comparison table
     print(f"\n\n{'='*60}")
     print("FINAL COMPARISON")
     print(f"{'='*60}")

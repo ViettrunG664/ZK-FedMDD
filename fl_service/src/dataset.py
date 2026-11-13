@@ -1,8 +1,3 @@
-"""
-PyTorch Dataset for DAIC-WOZ multimodal depression detection.
-Wraps preprocessed features into tensors ready for DataLoader.
-"""
-
 import numpy as np
 import torch
 from torch.utils.data import Dataset
@@ -10,7 +5,6 @@ from typing import Dict, List, Optional
 
 
 class DepressionDataset(Dataset):
-    """PyTorch Dataset that holds preprocessed audio, visual, text features and labels."""
 
     def __init__(
         self,
@@ -25,14 +19,11 @@ class DepressionDataset(Dataset):
         self.max_seq_len = max_seq_len
         self.participant_ids = participant_ids
 
-        # Convert to tensors, replacing None with zero tensors
         self.audio = self._to_tensor_list(audio_features, dtype="float")
         self.visual = self._to_tensor_list(visual_features, dtype="float")
 
-        # Text: token IDs as LongTensors
         self.text = self._to_text_tensors(text_features)
 
-        # Store actual sequence lengths (before padding) for masking
         self.audio_lengths = self._get_lengths(audio_features)
         self.visual_lengths = self._get_lengths(visual_features)
 
@@ -45,14 +36,12 @@ class DepressionDataset(Dataset):
                 t = None
             tensors.append(t)
 
-        # Find feature dim from first non-None sample
         feat_dim = 1
         for t in tensors:
             if t is not None:
                 feat_dim = t.shape[-1]
                 break
 
-        # Replace None with zero tensors
         for i, t in enumerate(tensors):
             if t is None:
                 tensors[i] = torch.zeros(self.max_seq_len, feat_dim)
@@ -60,11 +49,9 @@ class DepressionDataset(Dataset):
         return tensors
 
     def _to_text_tensors(self, text_features: List[Optional[np.ndarray]]) -> List[torch.Tensor]:
-        """Convert text token ID arrays to LongTensors."""
         tensors = []
-        max_len = 128  # default
+        max_len = 128
 
-        # Find max_len from first valid sample
         for f in text_features:
             if f is not None and isinstance(f, np.ndarray) and len(f) > 0:
                 max_len = len(f)

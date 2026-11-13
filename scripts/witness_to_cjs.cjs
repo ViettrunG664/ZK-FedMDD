@@ -1,5 +1,3 @@
-// circom emits CommonJS .js files, but package.json declares "type": "module".
-// Runs automatically after `npm run build:circuits`.
 const fs = require("fs");
 
 const dir = "circuits/build/hashlogin_js";

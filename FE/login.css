@@ -11,7 +11,7 @@ body {
 
 .login-container {
   overflow: visible !important;
-  padding-bottom: 80px; /* Tạo thêm không gian bên dưới */
+  padding-bottom: 80px;
   background-color: #ffffff;
   padding: 40px;
   border-radius: 16px;
@@ -69,7 +69,7 @@ body {
 .password-wrapper input {
   width: 100%;
   box-sizing: border-box;
-  padding-right: 40px; /* Chừa chỗ cho con mắt */
+  padding-right: 40px;
 }
 
 .toggle-password {
@@ -130,7 +130,6 @@ body {
   text-decoration: underline;
 }
 
-/* Thêm style cho label và select để đồng bộ */
 .login-container label {
   font-weight: 600;
   display: block;
@@ -169,12 +168,10 @@ body {
   margin-bottom: 16px;
 }
 
-/* Đảm bảo dropdown hiển thị dưới input */
 .login-container select {
   position: relative;
   z-index: 1;
 }
-/* Tùy chọn thêm: style dropdown option */
 .login-container select option {
   padding: 8px;
   font-size: 16px;

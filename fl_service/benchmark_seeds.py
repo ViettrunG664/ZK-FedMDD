@@ -1,32 +1,9 @@
-"""
-Multi-seed benchmark driver for statistical-significance reporting.
-
-Experiments (--exp, several allowed):
-  main     centralized, FedAvg K=2..6 and FedAvg + CL, all SEEDS
-  fedprox  FedProx, mu in PROX_MUS, K=2..6, first 5 seeds
-  noniid   Dirichlet label skew, alpha in ALPHAS, FedAvg and FedProx (--prox-mu),
-           K in {3, 6}, first 5 seeds
-  shift    a different simulated recording device per facility, local vs global
-           normalization, K in {3, 6}, first 5 seeds
-
-Every run appends one JSON line to --out: participant-level test metrics of
-every facility (accuracy, F1, precision, recall, specificity, ROC-AUC,
-confusion matrix, threshold, probabilities), their mean, and the per-round
-history. Runs already in the file are skipped, so an interrupted run resumes
-where it stopped. Statistics are computed separately by analyze_seeds.py.
-
-Run from the fl_service/ directory:
-    python benchmark_seeds.py --exp main
-    python benchmark_seeds.py --exp fedprox noniid shift
-    python benchmark_seeds.py --exp main fedprox noniid shift --smoke   (3 rounds, seed 42, one K)
-"""
 import os
 import sys
 import json
 import argparse
 from datetime import datetime
 
-# Ensure we run with CWD = fl_service (benchmark_all uses relative paths)
 HERE = os.path.dirname(os.path.abspath(__file__))
 os.chdir(HERE)
 sys.path.insert(0, HERE)
@@ -42,7 +19,6 @@ SHIFT_SIGMA = 0.5
 
 
 def plan(exps, prox_mu, smoke):
-    """(config name, kind, run_fl_n_clients kwargs, seed) for every run, seed-major."""
     seeds = [42] if smoke else SEEDS
     ks = [2] if smoke else K_VALUES
     ks_small = [3] if smoke else [3, 6]
@@ -119,7 +95,6 @@ def main():
         json.dump({"hardware": B.get_hardware_info(), "seeds": SEEDS, "k_values": K_VALUES,
                    "prox_mus": PROX_MUS, "alphas": ALPHAS, "shift_sigma": SHIFT_SIGMA}, f, indent=2)
 
-    # D-vlog has a fixed train/val/test split; prepare once and reuse.
     print("\n--- Preparing data (once) ---")
     data = B.prepare_all_data(config)
 

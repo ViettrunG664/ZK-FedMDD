@@ -1,5 +1,3 @@
-# Continual Learning (D-vlog only)
-# Split D-vlog train into 2 tasks, train sequentially
 experiment:
   version: "v11"
   name: "Continual Learning (D-vlog)"
@@ -9,9 +7,9 @@ data:
   dataset_dir: "data/dvlog-dataset"
 
 continual:
-  ewc_lambda: 5000        # EWC penalty strength
-  replay_buffer_size: 300  # Number of old samples to keep for replay
-  replay_weight: 0.5       # Weight of replay loss
+  ewc_lambda: 5000
+  replay_buffer_size: 300
+  replay_weight: 0.5
 
 preprocessing:
   max_seq_len: 64

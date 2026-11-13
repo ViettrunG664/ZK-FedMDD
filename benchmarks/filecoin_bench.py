@@ -1,16 +1,3 @@
-"""
-Filecoin/IPFS Storage Performance Benchmark
-
-Measures:
-- Upload latency (pin/deal to Lighthouse)
-- Retrieve latency (p50/p95/p99)
-- Success rate
-- File sizes
-
-Usage:
-    python benchmarks/filecoin_bench.py --runs 50 --output metrics/filecoin_results.json
-"""
-
 import time
 import json
 import argparse
@@ -23,7 +10,6 @@ import requests
 BASE_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BASE_DIR))
 
-# Import utilities
 try:
     from utils.filecoin import pushToFilecoin
     from utils.encryption import encryptAES
@@ -33,10 +19,8 @@ except ImportError:
     HAS_UTILS = False
 
 def measure_upload(data: dict, filename: str):
-    """Measure upload to Filecoin/Lighthouse"""
     if not HAS_UTILS:
-        # Mock upload
-        time.sleep(0.5 + (hash(filename) % 100) / 200)  # Simulate ~0.5-1s
+        time.sleep(0.5 + (hash(filename) % 100) / 200)
         return {
             "latency_ms": 500 + (hash(filename) % 500),
             "cid": f"Qm{hash(filename):020x}",
@@ -68,9 +52,7 @@ def measure_upload(data: dict, filename: str):
         }
 
 def measure_retrieve(cid: str, url: str):
-    """Measure retrieve from Filecoin/IPFS"""
     if not cid or not url:
-        # Mock retrieve
         time.sleep(0.3 + (hash(cid or "test") % 100) / 300)
         return {
             "latency_ms": 300 + (hash(cid or "test") % 300),
@@ -101,7 +83,6 @@ def measure_retrieve(cid: str, url: str):
         }
 
 def run_benchmark(num_runs: int, output_file: str):
-    """Run Filecoin storage benchmarks"""
     print(f"📦 Running {num_runs} Filecoin storage benchmarks...")
     print(f"{'='*60}\n")
     
@@ -111,7 +92,6 @@ def run_benchmark(num_runs: int, output_file: str):
     for i in range(num_runs):
         print(f"Run {i+1}/{num_runs}:", end=" ")
         
-        # Generate test data
         test_data = {
             "cccd": {"encrypted": f"test_encrypted_{i}", "iv": f"test_iv_{i}"},
             "salt": f"test_salt_{i:04x}",
@@ -121,14 +101,12 @@ def run_benchmark(num_runs: int, output_file: str):
         
         filename = f"benchmark_test_{i}.json"
         
-        # Measure upload
         upload_result = measure_upload(test_data, filename)
         upload_results.append(upload_result)
         
         if upload_result["success"]:
             print(f"Upload ✓ {upload_result['latency_ms']:.0f}ms", end=" | ")
             
-            # Measure retrieve (only if upload succeeded)
             retrieve_result = measure_retrieve(
                 upload_result.get("cid"),
                 upload_result.get("url", "")
@@ -143,7 +121,6 @@ def run_benchmark(num_runs: int, output_file: str):
             print(f"Upload ✗ {upload_result.get('error', 'Failed')}")
             retrieve_results.append({"success": False, "latency_ms": 0, "error": "Upload failed"})
     
-    # Calculate statistics
     successful_uploads = [r for r in upload_results if r["success"]]
     successful_retrieves = [r for r in retrieve_results if r["success"]]
     
@@ -153,7 +130,6 @@ def run_benchmark(num_runs: int, output_file: str):
         "retrieve": {}
     }
     
-    # Upload stats
     if successful_uploads:
         upload_latencies = [r["latency_ms"] for r in successful_uploads]
         upload_sorted = sorted(upload_latencies)
@@ -178,7 +154,6 @@ def run_benchmark(num_runs: int, output_file: str):
             }
         }
     
-    # Retrieve stats
     if successful_retrieves:
         retrieve_latencies = [r["latency_ms"] for r in successful_retrieves]
         retrieve_sorted = sorted(retrieve_latencies)
@@ -204,14 +179,12 @@ def run_benchmark(num_runs: int, output_file: str):
         "retrieves": retrieve_results
     }
     
-    # Save results
     output_path = BASE_DIR / output_file
     output_path.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_path, 'w') as f:
         json.dump(stats, f, indent=2)
     
-    # Print summary
     print(f"\n{'='*60}")
     print(f"Filecoin Storage Benchmark Results")
     print(f"{'='*60}")

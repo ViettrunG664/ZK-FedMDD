@@ -1,10 +1,3 @@
-"""
-LaTeX rows and summary numbers for the revised Section 7 (JISAS-D-26-04548),
-computed from results/r1_runs.jsonl, results/ablation_r1.jsonl and results/r1_stats.json.
-
-Run from fl_service/ after analyze_r1.py:
-    python paper_tables_r1.py > results/paper_tables_r1.txt
-"""
 import os
 import json
 from collections import defaultdict
@@ -68,11 +61,9 @@ for c, label in names:
     sens, spec = tp / (tp + fn), tn / (tn + fp)
     prev = (tp + fn) / (tn + fp + fn + tp)
     ppv10 = 0.1 * sens / (0.1 * sens + 0.9 * (1 - spec))
-    # descriptive test-ROC trade-off, per run and facility, then averaged
     spec_at_s80, sens_at_sp60 = [], []
     for r in runs[c]:
         for site in r["PerSite"]:
-            # released logs carry the precomputed points instead of labels/probs (strip_logs.py)
             sp, se = (roc_operating_points(site["labels"], site["probs"]) if "probs" in site
                       else (site["spec_at_sens80"], site["sens_at_spec60"]))
             spec_at_s80.append(sp)

@@ -1,30 +1,25 @@
-// Lấy param từ URL
 function getParam(key) {
   return new URLSearchParams(window.location.search).get(key);
 }
 const patientHash = getParam('patient') || 'Unknown';
 const department = getParam('department') || 'Unknown';
 
-// Giả lập danh sách hồ sơ
 const records = [
-  { title: "Phẫu thuật ruột thừa", date: "2024-06-01", note: "Thành công", file: "appendix.pdf" },
-  { title: "Nội soi dạ dày", date: "2024-05-25", note: "Bình thường", file: "gastroscopy.pdf" }
+  { title: "Appendectomy", date: "2024-06-01", note: "Successful", file: "appendix.pdf" },
+  { title: "Gastroscopy", date: "2024-05-25", note: "Normal", file: "gastroscopy.pdf" }
 ];
-// Giả lập phân quyền: 
-const loginRole = getParam('role') || 'patient'; // 'doctor' hoặc 'patient'
-const doctorDept = getParam('doctorDept') || ''; // vd: Surgery
+const loginRole = getParam('role') || 'patient';
+const doctorDept = getParam('doctorDept') || '';
 
 document.getElementById('patientHash').textContent = patientHash;
 document.getElementById('departmentName').textContent = department;
 
-// Hiển thị nút upload nếu là bác sĩ đúng khoa
 if (loginRole === 'doctor' && doctorDept === department) {
   document.getElementById('uploadBtnWrapper').innerHTML = `<button id="uploadRecordBtn">Upload record</button>`;
 } else {
   document.getElementById('uploadBtnWrapper').innerHTML = '';
 }
 
-// Render hồ sơ
 const list = document.getElementById('recordList');
 if (!records.length) {
   list.innerHTML = `<li class="no-record">No medical records found.</li>`;

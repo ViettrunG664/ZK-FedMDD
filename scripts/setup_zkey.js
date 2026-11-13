@@ -1,10 +1,3 @@
-// Groth16 phase-2 setup for circuits/hashlogin.circom.
-//   phase 1: Hermez powersOfTau28_hez_final_18.ptau (public, multi-party)
-//   phase 2: one contribution with fresh random entropy, then a public beacon
-//            = hash of the first Sepolia block mined after that contribution.
-// Writes hashlogin_final.zkey, verification_key.json, contracts/Verifier.sol
-// and circuits/build/setup_transcript.json.
-// Usage: npx hardhat run scripts/setup_zkey.js --network sepolia
 import fs from "fs";
 import crypto from "crypto";
 import { execSync } from "child_process";
@@ -27,7 +20,7 @@ console.log("① groth16 setup (phase-2 start)");
 await snarkjs.zKey.newZKey(R1CS, PTAU, Z0, log);
 
 console.log("② contribution");
-const entropy = crypto.randomBytes(64).toString("hex");   // never written to disk
+const entropy = crypto.randomBytes(64).toString("hex");
 const contribHash = await snarkjs.zKey.contribute(Z0, Z1, "ZK-FedMDD contribution 1", entropy, log);
 const contribDone = await ethers.provider.getBlockNumber();
 
@@ -69,6 +62,6 @@ const transcript = {
   sha256: { r1cs: sha256(R1CS), finalZkey: sha256(ZF), verifier: sha256("contracts/Verifier.sol") },
 };
 fs.writeFileSync(`${B}/setup_transcript.json`, JSON.stringify(transcript, null, 2));
-fs.rmSync(Z1);   // intermediate; Z0 kept so the chain can be re-verified
+fs.rmSync(Z1);
 console.log("Done →", `${B}/setup_transcript.json`);
-process.exit(0);   // snarkjs leaves curve worker threads alive
+process.exit(0);

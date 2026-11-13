@@ -1,7 +1,3 @@
-// Filecoin Storage Benchmark
-// Measures upload/retrieve latency and success rate
-//
-// Usage: node benchmarks/filecoin_bench.js
 
 import fs from 'fs';
 import { pushToFilecoin } from '../utils/filecoin.js';
@@ -9,7 +5,6 @@ import { pushToFilecoin } from '../utils/filecoin.js';
 const NUM_RUNS = 10;
 const OUTPUT_FILE = 'metrics/filecoin_results.json';
 
-// Helper functions
 function average(arr) {
   return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
@@ -42,12 +37,11 @@ async function runFilecoinBenchmark() {
   for (let i = 0; i < NUM_RUNS; i++) {
     console.log(`Run ${i + 1}/${NUM_RUNS}:`);
 
-    // Generate test data
     const testData = {
       run: i + 1,
       timestamp: new Date().toISOString(),
       cccd: `test_${Date.now()}_${i}`,
-      data: `Sample medical record ${i}`.repeat(10)  // ~250 bytes
+      data: `Sample medical record ${i}`.repeat(10)
     };
 
     const filename = `benchmark_${i + 1}.json`;
@@ -55,7 +49,6 @@ async function runFilecoinBenchmark() {
     try {
       const startTime = Date.now();
 
-      // Upload to Filecoin
       const uploadResult = await pushToFilecoin(
         testData,
         filename,
@@ -95,11 +88,9 @@ async function runFilecoinBenchmark() {
       });
     }
 
-    // Small delay between requests
     await new Promise(resolve => setTimeout(resolve, 500));
   }
 
-  // Calculate statistics
   const stats = {
     config: {
       num_runs: NUM_RUNS,
@@ -130,11 +121,9 @@ async function runFilecoinBenchmark() {
     };
   }
 
-  // Save results
   fs.mkdirSync('metrics', { recursive: true });
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(stats, null, 2));
 
-  // Print summary
   console.log('='.repeat(60));
   console.log('Filecoin Benchmark Results');
   console.log('='.repeat(60));

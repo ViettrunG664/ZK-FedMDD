@@ -1,5 +1,3 @@
-// node scripts/02_check.js
-// import dotenvVault from "dotenv-vault";
 import dotenv from "dotenv";
 import crypto from "crypto";
 import fs from "fs";
@@ -10,7 +8,6 @@ import { getBytes, toBeHex } from "ethers";
 import { keccak256, toUtf8Bytes } from "ethers";
 
 const t0 = Date.now();
-// dotenvVault.config();
 dotenv.config();
 const MASTER = Buffer.from(process.env.MASTER_SALT, "hex");
 const pending = JSON.parse(fs.readFileSync("pending.json", "utf8"));

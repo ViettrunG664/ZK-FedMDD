@@ -1,8 +1,3 @@
-// Is a gas difference due to our code or to the network's gas schedule?
-// Estimates (no transaction sent) the PRE-REVISION IdentityAccess.register()
-// on the contract still deployed at its old address, for comparison with the
-// 121,367 gas recorded on Sepolia in metrics/gas_results_sepolia.json (Nov 2025).
-// Usage: npx hardhat run benchmarks/check_gas_schedule.js --network sepolia
 import pkg from "hardhat";
 const { ethers } = pkg;
 
